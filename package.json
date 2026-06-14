@@ -1,0 +1,104 @@
+{
+  "name": "@dloizides/frontend-devtools",
+  "version": "1.0.0",
+  "description": "Shared RN-web dev tooling for the dloizides.com SaaS frontends: the 17-rule custom ESLint plugin pack (also at the /eslint subpath) and the parameterized initI18n() i18next + react-i18next init factory. Owned shape erevna-web / katalogos-web / kefi-web shared byte-for-byte; never imports a product.",
+  "keywords": [
+    "eslint",
+    "eslint-plugin",
+    "i18next",
+    "react-i18next",
+    "react-native",
+    "dev-tooling",
+    "dloizides"
+  ],
+  "author": "dloizides",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openmindednewby/frontend-devtools.git"
+  },
+  "homepage": "https://github.com/openmindednewby/frontend-devtools#readme",
+  "bugs": {
+    "url": "https://github.com/openmindednewby/frontend-devtools/issues"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      }
+    },
+    "./eslint": {
+      "require": {
+        "types": "./dist/eslint/index.d.ts",
+        "default": "./dist/eslint/index.js"
+      },
+      "import": {
+        "types": "./dist/eslint/index.d.mts",
+        "default": "./dist/eslint/index.mjs"
+      }
+    }
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "rimraf dist && tsup",
+    "build:watch": "tsup --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist",
+    "security:audit": "npm audit --audit-level=high",
+    "deps:outdated": "npm outdated || exit 0",
+    "deps:unused": "npx depcheck --ignores \"@types/jest,@types/node,rimraf,@typescript-eslint/parser\"",
+    "deps:licenses": "npx license-checker --onlyAllow \"MIT;Apache-2.0;ISC;BSD-2-Clause;BSD-3-Clause;0BSD;Unlicense;CC0-1.0\"",
+    "deps:health": "npm run deps:outdated && npm run deps:unused",
+    "prepublishOnly": "npm run clean && npm run build && npm run test"
+  },
+  "peerDependencies": {
+    "eslint": ">=8.0.0",
+    "i18next": ">=23.0.0",
+    "react-i18next": ">=13.0.0"
+  },
+  "peerDependenciesMeta": {
+    "eslint": {
+      "optional": true
+    },
+    "i18next": {
+      "optional": true
+    },
+    "react-i18next": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/eslint": "^8.56.12",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.19.32",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.32.0",
+    "i18next": "^23.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "react": "^18.0.0",
+    "react-i18next": "^13.0.0",
+    "rimraf": "^5.0.0",
+    "ts-jest": "^29.1.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0"
+  }
+}

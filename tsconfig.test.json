@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noUncheckedIndexedAccess": false,
+    "allowJs": true,
+    "checkJs": false,
+    "isolatedModules": true,
+    "rootDir": "."
+  },
+  "include": ["src/**/*"]
+}
