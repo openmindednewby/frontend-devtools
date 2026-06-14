@@ -21,6 +21,11 @@
   "bugs": {
     "url": "https://github.com/openmindednewby/frontend-devtools/issues"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
