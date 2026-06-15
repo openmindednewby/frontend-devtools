@@ -17,15 +17,11 @@
  * Never imports a product.
  */
 
-// i18n init factory
+// i18n init factory — the ONLY thing the main entry exports, so importing this
+// package at runtime (apps do `import { initI18n } from '@dloizides/frontend-devtools'`)
+// stays React-Native-safe. The ESLint rule pack lives under the `./eslint` subpath
+// ONLY: its rule files import Node's `fs`/`path`, which break Metro's native bundle
+// when pulled in transitively. (Re-exporting eslint here previously crashed
+// `eas build` for Android at the JS-bundle phase — Platform P4.)
 export { initI18n } from './i18n/initI18n';
 export type { InitI18nOptions } from './i18n/initI18n';
-
-// ESLint custom rule pack (also at the `/eslint` subpath)
-export { plugin, rules, ruleNames, legacyPlugins } from './eslint';
-export type {
-  CustomRule,
-  FlatConfigPlugin,
-  FlatConfig,
-  SingleRulePlugin,
-} from './eslint';

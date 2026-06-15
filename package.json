@@ -1,6 +1,6 @@
 {
   "name": "@dloizides/frontend-devtools",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Shared RN-web dev tooling for the dloizides.com SaaS frontends: the 17-rule custom ESLint plugin pack (also at the /eslint subpath) and the parameterized initI18n() i18next + react-i18next init factory. Owned shape erevna-web / katalogos-web / kefi-web shared byte-for-byte; never imports a product.",
   "keywords": [
     "eslint",
