@@ -89,10 +89,18 @@ function findGuardBinding(ast) {
  */
 function buildGuardImportFix(fixer, sourceCode, utilImportPath) {
   const importStatement = `import { ${GUARD_NAME} } from '${utilImportPath}';`;
-  const imports = sourceCode.ast.body.filter((node) => node.type === 'ImportDeclaration');
+  const body = sourceCode.ast.body;
+  const imports = body.filter((node) => node.type === 'ImportDeclaration');
 
   if (imports.length > 0) {
     return fixer.insertTextAfter(imports[imports.length - 1], `\n${importStatement}`);
+  }
+
+  // No imports yet. Insert before the first statement rather than at offset 0 —
+  // a node's range excludes its leading comments, so the file's header docblock
+  // stays on top instead of being pushed below the new import.
+  if (body.length > 0) {
+    return fixer.insertTextBefore(body[0], `${importStatement}\n`);
   }
 
   return fixer.insertTextBeforeRange([0, 0], `${importStatement}\n`);

@@ -152,3 +152,22 @@ describe('no-null-check --fix (multipass, the real pipeline)', () => {
     expect(output).not.toContain('import');
   });
 });
+
+describe('no-null-check --fix keeps the file header on top', () => {
+  const linter = new Linter();
+  linter.defineRule('local/no-null-check', rule as never);
+  const config = {
+    parserOptions: { ecmaVersion: 2022 as const, sourceType: 'module' as const },
+    rules: { 'local/no-null-check': 'error' as const },
+  };
+
+  it('inserts the import BELOW a leading docblock, not above it', () => {
+    const source =
+      '/** File header. */\nexport function pick(v) {\n  if (v === undefined) return 1;\n  return v;\n}';
+
+    const { output } = linter.verifyAndFix(source, config);
+
+    expect(output.startsWith('/** File header. */\n')).toBe(true);
+    expect(output).toContain("/** File header. */\nimport { isValueDefined } from '@dloizides/utils';\n");
+  });
+});
