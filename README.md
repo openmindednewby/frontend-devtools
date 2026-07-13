@@ -57,6 +57,46 @@ export default [
 ];
 ```
 
+### Two rules worth knowing the exact semantics of
+
+#### `smart-max-lines` — `functionWarn` is NOT a warning tier
+
+ESLint has **no per-report severity**: every `context.report()` a rule makes is
+emitted at the severity the *rule* is configured with. A rule cannot warn on one
+line and error on another.
+
+So `['error', { functionWarn: 30 }]` does **not** give you "warn at 30, error at
+50" — it gives you a hard **error at 30**, silently overriding the documented
+50-line limit. That mismatch is why `functionWarn` is now **opt-in and off by
+default** (since 1.1.0). Out of the box the only threshold is `functionMax`:
+
+| Function kind | Enforced limit |
+| --- | --- |
+| React component (returns JSX) | `componentMax`, default **200** |
+| Regular function | `functionMax`, default **50** |
+
+Set `functionWarn` only if you deliberately want a *second, stricter* hard
+threshold — it reports at the rule's own severity, not at `'warn'`.
+
+#### `no-null-check` — the autofix brings its own import
+
+The fix rewrites `x === undefined` → `!isValueDefined(x)`. That is only valid
+source if `isValueDefined` is in scope, so the fixer **adds the import** when the
+file lacks it:
+
+```js
+'no-null-check/no-null-check': ['error', { utilImportPath: '@dloizides/utils' }],
+```
+
+`utilImportPath` (default `@dloizides/utils`) is the module the import is added
+from. The fixer never touches the module that *defines* or *re-exports* the guard
+— it would otherwise self-import.
+
+> Before 1.1.0 the fixer emitted the call with no import, so `eslint --fix`
+> produced files referencing an undeclared global. Running `lint:fix` on a fresh
+> app corrupted ~20 files at once. If you are on ≤1.0.3, upgrade before running
+> `lint:fix`.
+
 Delete the local `eslint-plugins/*.mjs` files and their imports; the rule names,
 options, and severities stay exactly as they were.
 

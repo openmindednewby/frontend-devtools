@@ -3,12 +3,27 @@
  *
  * Applies different line limits based on function type:
  * - React components (functions returning JSX): higher limit (default 200)
- * - Regular functions: stricter limit (default 50, warning at 30)
+ * - Regular functions: stricter limit (default 50)
+ *
+ * ⚠️ `functionWarn` is NOT a separate "warning" severity.
+ *
+ * ESLint has no per-report severity: every `context.report()` a rule makes is
+ * emitted at the severity the *rule* is configured with. So when this rule is
+ * configured as `'error'` (as every app does), a `functionWarn` report is an
+ * ERROR too — a `functionWarn: 30` therefore silently turns the documented
+ * 50-line limit into a hard 30-line limit. That mismatch is exactly what bit
+ * ES-04, so `functionWarn` is now **opt-in and disabled by default**: out of the
+ * box the only enforced threshold is `functionMax` (50), which is what the docs
+ * have always promised.
+ *
+ * Set `functionWarn` only if you deliberately want a *second, stricter* hard
+ * threshold — it reports at the rule's own severity, not at 'warn'.
  */
 
 const COMPONENT_MAX_DEFAULT = 200;
 const FUNCTION_MAX_DEFAULT = 50;
-const FUNCTION_WARN_DEFAULT = 30;
+/** Disabled by default — see the severity note above. */
+const FUNCTION_WARN_DEFAULT = undefined;
 
 /**
  * Check if an AST node is a JSX element or fragment
@@ -252,7 +267,10 @@ const smartMaxLinesRule = {
           functionWarn: {
             type: 'integer',
             minimum: 1,
-            description: 'Warning threshold for regular functions',
+            description:
+              'Optional SECOND, stricter threshold for regular functions. Disabled by default. ' +
+              'Reports at the severity the rule is configured with (ESLint has no per-report ' +
+              'severity) — it is NOT a "warning" tier.',
           },
           skipBlankLines: {
             type: 'boolean',
@@ -272,7 +290,7 @@ const smartMaxLinesRule = {
       functionTooLong:
         'Function has too many lines ({{count}}). Maximum allowed is {{max}}.',
       functionWarning:
-        'Function has {{count}} lines which exceeds recommended limit of {{warn}}. Consider refactoring.',
+        'Function has {{count}} lines, over the configured stricter limit of {{warn}}. Consider refactoring.',
     },
   },
 
@@ -313,7 +331,7 @@ const smartMaxLinesRule = {
               max: String(functionMax),
             },
           });
-        } else if (lineCount > functionWarn) {
+        } else if (functionWarn !== undefined && lineCount > functionWarn) {
           context.report({
             node,
             messageId: 'functionWarning',

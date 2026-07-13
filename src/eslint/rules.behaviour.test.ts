@@ -19,6 +19,14 @@ const tsTester = new RuleTester({
 });
 
 // no-null-check — representative fixable JS rule.
+//
+// These cases used to assert the fixer emitted a bare `isValueDefined(x)` with NO
+// import — i.e. they codified the very bug that made `eslint --fix` corrupt
+// agora-web. The fixer now brings its own import, so the expected output does too.
+// Depth cases (existing import, self-import guard, multipass) live in
+// `src/rules/no-null-check.test.ts`.
+const GUARD_IMPORT = "import { isValueDefined } from '@dloizides/utils';\n";
+
 jsTester.run('no-null-check', rules['no-null-check'], {
   valid: [
     { code: 'if (isValueDefined(x)) doThing();' },
@@ -27,22 +35,22 @@ jsTester.run('no-null-check', rules['no-null-check'], {
   invalid: [
     {
       code: 'const ok = x !== null;',
-      output: 'const ok = isValueDefined(x);',
+      output: `${GUARD_IMPORT}const ok = isValueDefined(x);`,
       errors: [{ messageId: 'noNotEqualsNull' }],
     },
     {
       code: 'const ok = x === null;',
-      output: 'const ok = !isValueDefined(x);',
+      output: `${GUARD_IMPORT}const ok = !isValueDefined(x);`,
       errors: [{ messageId: 'noEqualsNull' }],
     },
     {
       code: 'const ok = x !== undefined;',
-      output: 'const ok = isValueDefined(x);',
+      output: `${GUARD_IMPORT}const ok = isValueDefined(x);`,
       errors: [{ messageId: 'noNotEqualsUndefined' }],
     },
     {
       code: 'const ok = x === undefined;',
-      output: 'const ok = !isValueDefined(x);',
+      output: `${GUARD_IMPORT}const ok = !isValueDefined(x);`,
       errors: [{ messageId: 'noEqualsUndefined' }],
     },
   ],
