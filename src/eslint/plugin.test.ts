@@ -1,10 +1,11 @@
 import { plugin, rules, ruleNames } from './plugin';
 import { legacyPlugins } from './legacy';
 
-// The exact 17 rule names that lived in the apps' `eslint-plugins/*.mjs`.
-// If a rule is dropped or renamed during migration, this list breaks — which is
-// the whole point (config keys + `eslint-disable-next-line <name>` must stay
-// stable across the extraction).
+// The rule roster. 17 of these were harvested byte-for-byte from the apps'
+// `eslint-plugins/*.mjs`; `no-raw-color-literal` is net-new (added here, never
+// duplicated in an app — the design-token gate).
+// If a rule is dropped or renamed, this list breaks — which is the whole point
+// (config keys + `eslint-disable-next-line <name>` must stay stable).
 const EXPECTED_RULE_NAMES = [
   'enforce-function-style',
   'enforce-module-structure',
@@ -20,13 +21,14 @@ const EXPECTED_RULE_NAMES = [
   'no-null-check',
   'no-optional-undefined',
   'no-product-imports-in-shared',
+  'no-raw-color-literal',
   'prefer-const-enum',
   'require-stable-hook-args',
   'smart-max-lines',
 ].sort();
 
 describe('frontend-devtools eslint plugin', () => {
-  it('exposes all 17 shared rules', () => {
+  it('exposes all 18 shared rules', () => {
     expect(ruleNames).toEqual(EXPECTED_RULE_NAMES);
   });
 
