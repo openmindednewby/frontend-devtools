@@ -5,6 +5,24 @@ All notable changes to `@dloizides/frontend-devtools` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-10-06
+
+COMMENTS-1 "No code comments; only short doc comments on public members" (decisions D-CMT-1, D-CMT-3).
+
+### Added
+
+- `no-comments`: reports every comment that is not a `/**` doc block and not a tool directive
+  (`eslint-*`, `@ts-*`, `prettier-ignore`, `istanbul`/`c8`, `/// <reference>`, `#__PURE__`,
+  `webpackChunkName`, shebang). `allow: string[]` adds directive regexes. Suggestion only, no autofix.
+- `doc-comment-public-only`: a doc block must sit on an exported declaration (incl. `export { x }`,
+  `export default x`, `module.exports`, ambient `declare module`) or a public member of one;
+  `private` / `protected` / `#` members and local declarations are reported.
+- `doc-comment-max-lines`: doc body capped at `max` (default 3) content lines; block tags other than
+  `allowedTags` (default `@param`, `@returns`) are reported. JSDoc type-annotation blocks
+  (`@type`, `@typedef`, ...) are exempt from both doc rules.
+- `commentsConfig` flat-config block (the three rules at `error`) and `COMMENT_RULE_NAMES`, exported
+  from `/eslint`. Not adopted by any app yet: each repo opts in as step 1 of its COMMENTS-CLEAN sweep.
+
 ## [1.1.0] - 2026-07-13
 
 Both changes come out of the ES-04 (agora-web) build, which surfaced two ways the

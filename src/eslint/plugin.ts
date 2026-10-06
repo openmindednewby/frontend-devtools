@@ -3,6 +3,8 @@ import type { CustomRule, FlatConfigPlugin, SingleRulePlugin } from './types';
 // The 17 shared custom rules (byte-for-byte the rule logic that lived in
 // erevna-web / katalogos-web `eslint-plugins/*.mjs`). Each module
 // default-exports `{ rules: { '<name>': rule } }`.
+import docCommentMaxLines from '../rules/doc-comment-max-lines.js';
+import docCommentPublicOnly from '../rules/doc-comment-public-only.js';
 import enforceFunctionStyle from '../rules/enforce-function-style.js';
 import enforceModuleStructure from '../rules/enforce-module-structure.js';
 import enforceRoutePreload from '../rules/enforce-route-preload.js';
@@ -10,6 +12,7 @@ import enforceTestColocation from '../rules/enforce-test-colocation.js';
 import enumFileIsolation from '../rules/enum-file-isolation.js';
 import i18nInterpolation from '../rules/i18n-interpolation.js';
 import i18nParamNames from '../rules/i18n-param-names.js';
+import noComments from '../rules/no-comments.js';
 import noBarrelCompanionFile from '../rules/no-barrel-companion-file.js';
 import noDuplicateNavPrefix from '../rules/no-duplicate-nav-prefix.js';
 import noDuplicateSharedPatterns from '../rules/no-duplicate-shared-patterns.js';
@@ -26,6 +29,8 @@ import smartMaxLines from '../rules/smart-max-lines.js';
 const PLUGIN_VERSION = '1.0.0';
 
 const ruleModules: readonly SingleRulePlugin[] = [
+  docCommentMaxLines,
+  docCommentPublicOnly,
   enforceFunctionStyle,
   enforceModuleStructure,
   enforceRoutePreload,
@@ -34,6 +39,7 @@ const ruleModules: readonly SingleRulePlugin[] = [
   i18nInterpolation,
   i18nParamNames,
   noBarrelCompanionFile,
+  noComments,
   noDuplicateNavPrefix,
   noDuplicateSharedPatterns,
   noGeneratedModelsBarrelValueImport,

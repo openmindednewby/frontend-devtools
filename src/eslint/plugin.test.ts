@@ -7,6 +7,9 @@ import { legacyPlugins } from './legacy';
 // If a rule is dropped or renamed, this list breaks — which is the whole point
 // (config keys + `eslint-disable-next-line <name>` must stay stable).
 const EXPECTED_RULE_NAMES = [
+  'doc-comment-max-lines',
+  'doc-comment-public-only',
+  'no-comments',
   'enforce-function-style',
   'enforce-module-structure',
   'enforce-route-preload',
@@ -28,7 +31,7 @@ const EXPECTED_RULE_NAMES = [
 ].sort();
 
 describe('frontend-devtools eslint plugin', () => {
-  it('exposes all 18 shared rules', () => {
+  it('exposes all 21 shared rules', () => {
     expect(ruleNames).toEqual(EXPECTED_RULE_NAMES);
   });
 
