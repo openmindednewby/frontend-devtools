@@ -5,6 +5,17 @@ All notable changes to `@dloizides/frontend-devtools` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-10-07
+
+KEFI-ACT-1 "Same attendee actions everywhere" (generalized: one row-action source per entity, every portal).
+
+### Added
+
+- `single-row-action-source`: reports `<RowActionGroup actions>` from `@dloizides/ui-buttons` built in the same file
+  (inline array, array-bound identifier, `useMemo` returning an array, local builder function, `RowActionSpec[]`
+  annotated local). Imported builders/sets and props pass. No options, no autofix.
+- `rowActionsConfig` and `recommendedConfig` flat-config blocks (`recommendedConfig` = comments + row actions, all `error`).
+
 ## [1.4.0] - 2026-10-07
 
 COMMENTS-1 "No code comments; only short doc comments on public members", decision D-CMT-4 "One-line summary, no call chains".

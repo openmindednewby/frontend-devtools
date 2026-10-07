@@ -23,6 +23,7 @@ import noProductImportsInShared from '../rules/no-product-imports-in-shared.js';
 import noRawColorLiteral from '../rules/no-raw-color-literal.js';
 import preferConstEnum from '../rules/prefer-const-enum.js';
 import requireStableHookArgs from '../rules/require-stable-hook-args.js';
+import singleRowActionSource from '../rules/single-row-action-source.js';
 import smartMaxLines from '../rules/smart-max-lines.js';
 
 // Package version — kept in sync with package.json by the publish flow.
@@ -49,6 +50,7 @@ const ruleModules: readonly SingleRulePlugin[] = [
   noRawColorLiteral,
   preferConstEnum,
   requireStableHookArgs,
+  singleRowActionSource,
   smartMaxLines,
 ];
 

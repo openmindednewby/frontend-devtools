@@ -120,7 +120,18 @@ export default [
 `i18n-param-names`, `no-barrel-companion-file`, `no-duplicate-nav-prefix`,
 `no-duplicate-shared-patterns`, `no-generated-models-barrel-value-import`,
 `no-null-check`, `no-optional-undefined`, `no-product-imports-in-shared`,
-`prefer-const-enum`, `require-stable-hook-args`, `smart-max-lines`.
+`prefer-const-enum`, `require-stable-hook-args`, `single-row-action-source`,
+`smart-max-lines`.
+
+#### `single-row-action-source`
+
+Reports `<RowActionGroup actions={...}>` (imported from `@dloizides/ui-buttons`) when
+`actions` is an inline array literal, or an identifier / `useMemo` / local function in
+the same file that builds the array (`RowActionSpec[]`). Allowed: a call to a builder or
+set imported from another module (`buildXRowActions(row)`, `xRowActions.build(row)`), or
+a prop passed in. Fix: build row actions once per entity with `defineRowActions` in a
+`*RowActions` module; a table may only omit an action with a reason. Enabled at `error`
+by `recommendedConfig` and `rowActionsConfig`.
 
 `ruleNames` exports the sorted list for migration assertions (prove no rule was
 dropped).

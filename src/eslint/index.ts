@@ -8,7 +8,13 @@
  */
 export { plugin, rules, ruleNames } from './plugin';
 export { legacyPlugins } from './legacy';
-export { COMMENT_RULE_NAMES, commentsConfig } from './configs';
+export {
+  COMMENT_RULE_NAMES,
+  ROW_ACTION_RULE_NAMES,
+  commentsConfig,
+  recommendedConfig,
+  rowActionsConfig,
+} from './configs';
 export type {
   CustomRule,
   FlatConfigPlugin,

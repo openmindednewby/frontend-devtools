@@ -19,3 +19,19 @@ export const commentsConfig: FlatConfig = {
     '@dloizides/doc-comment-max-lines': ['error', { max: DOC_COMMENT_MAX_LINES }],
   },
 };
+
+export const ROW_ACTION_RULE_NAMES: readonly string[] = ['single-row-action-source'];
+
+/** Flat-config block for row actions: RowActionGroup actions come from one shared defineRowActions set. */
+export const rowActionsConfig: FlatConfig = {
+  plugins: commentsConfig.plugins,
+  rules: {
+    '@dloizides/single-row-action-source': 'error',
+  },
+};
+
+/** The recommended flat-config block: every rule the pack enables by default, at error. */
+export const recommendedConfig: FlatConfig = {
+  plugins: commentsConfig.plugins,
+  rules: { ...commentsConfig.rules, ...rowActionsConfig.rules },
+};

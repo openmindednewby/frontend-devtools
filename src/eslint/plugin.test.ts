@@ -27,11 +27,12 @@ const EXPECTED_RULE_NAMES = [
   'no-raw-color-literal',
   'prefer-const-enum',
   'require-stable-hook-args',
+  'single-row-action-source',
   'smart-max-lines',
 ].sort();
 
 describe('frontend-devtools eslint plugin', () => {
-  it('exposes all 21 shared rules', () => {
+  it('exposes all 22 shared rules', () => {
     expect(ruleNames).toEqual(EXPECTED_RULE_NAMES);
   });
 
