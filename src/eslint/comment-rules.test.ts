@@ -92,13 +92,30 @@ tsTester.run('doc-comment-max-lines', rules['doc-comment-max-lines'], {
     { code: src('~** One line. */\nexport const a = 1;') },
     { code: src('~**\n * Adds.\n * @param a first\n * @returns sum\n */\nexport const add = (a: number) => a;') },
     { code: src('~**\n * A {@link B} ref.\n */\nexport const a = 1;') },
-    { code: src('~**\n * One.\n * Two.\n * Three.\n * Four.\n */\nexport const a = 1;'), options: [{ max: 4 }] },
+    { code: src('~**\n * One.\n * Two.\n * Three.\n * Four.\n */\nexport const a = 1;'), options: [{ max: 4, summaryMaxLines: 4 }] },
+    { code: src('~** Formats a price for display. */\nexport const a = 1;') },
+    { code: src('~**\n * Two summary lines.\n * Allowed here.\n */\nexport const a = 1;'), options: [{ summaryMaxLines: 2 }] },
     { code: src('~** @type {import("x").Y} */\nexport const a = 1;') },
   ],
   invalid: [
     {
       code: src('~**\n * One.\n * Two.\n * Three.\n * Four.\n */\nexport const a = 1;'),
       errors: [{ messageId: 'tooLong', data: { actual: '4', max: '3' } }],
+    },
+    {
+      code: src('~**\n * Formats a price.\n * For display in the cart.\n */\nexport const a = 1;'),
+      errors: [{ messageId: 'summaryTooLong', data: { actual: '2', max: '1' } }],
+    },
+    {
+      code: src('~**\n * Formats a price.\n * For display.\n * @param a amount\n */\nexport const f = (a: number) => a;'),
+      errors: [{ messageId: 'summaryTooLong' }],
+    },
+    { code: src('~** Flow: A → B */\nexport const a = 1;'), errors: [{ messageId: 'callChain' }] },
+    { code: src('~** Loads the cart -> prices it. */\nexport const a = 1;'), errors: [{ messageId: 'callChain' }] },
+    { code: src('~** Starts the job.\n * Flow: queue then run */\nexport const a = 1;'), errors: [{ messageId: 'callChain' }] },
+    {
+      code: src(`~** ${'x'.repeat(121)} */\nexport const a = 1;`),
+      errors: [{ messageId: 'lineTooLong', data: { actual: '121', max: '120' } }],
     },
     {
       code: src('~**\n * Adds.\n * @example add(1)\n */\nexport const add = (a: number) => a;'),

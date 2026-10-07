@@ -5,6 +5,17 @@ All notable changes to `@dloizides/frontend-devtools` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-10-07
+
+COMMENTS-1 "No code comments; only short doc comments on public members", decision D-CMT-4 "One-line summary, no call chains".
+
+### Changed
+
+- `doc-comment-max-lines`: the description (lines other than `@param` / `@returns`) is capped at ONE line
+  (`summaryMaxLines`, default 1), every doc line at 120 chars (`lineMaxChars`), and a line containing an arrow
+  (U+2192 or `->`) or starting `Flow:` is reported (`callChain`). Matches `.claude/hooks/review-violations.js` docBlock().
+  The 3-line total cap is unchanged. One report per block; banned tags take precedence.
+
 ## [1.3.0] - 2026-10-06
 
 COMMENTS-1 "No code comments; only short doc comments on public members" (decisions D-CMT-1, D-CMT-3).
