@@ -49,6 +49,36 @@
         "types": "./dist/eslint/index.d.mts",
         "default": "./dist/eslint/index.mjs"
       }
+    },
+    "./test-results": {
+      "require": {
+        "types": "./dist/test-results/index.d.ts",
+        "default": "./dist/test-results/index.js"
+      },
+      "import": {
+        "types": "./dist/test-results/index.d.mts",
+        "default": "./dist/test-results/index.mjs"
+      }
+    },
+    "./test-results/jest-reporter": {
+      "require": {
+        "types": "./dist/test-results/jestReporter.d.ts",
+        "default": "./dist/test-results/jestReporter.js"
+      },
+      "import": {
+        "types": "./dist/test-results/jestReporter.d.mts",
+        "default": "./dist/test-results/jestReporter.mjs"
+      }
+    },
+    "./test-results/vitest-reporter": {
+      "require": {
+        "types": "./dist/test-results/vitestReporter.d.ts",
+        "default": "./dist/test-results/vitestReporter.js"
+      },
+      "import": {
+        "types": "./dist/test-results/vitestReporter.d.mts",
+        "default": "./dist/test-results/vitestReporter.mjs"
+      }
     }
   },
   "sideEffects": false,

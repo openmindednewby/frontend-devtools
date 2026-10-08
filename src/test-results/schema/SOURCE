@@ -1,0 +1,3 @@
+source: NuGetPackages/Dloizides.Testing/schema/testdoc-results.v1.schema.json
+source-sha: UNCOMMITTED (working tree of Dloizides.Testing @ 6bc8b9f, copied 2026-10-08)
+deviation: the "schema" pattern escapes "\." are written "\\." here; the source file is not valid JSON until it takes the same fix

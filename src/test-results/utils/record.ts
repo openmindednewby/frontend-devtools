@@ -1,0 +1,59 @@
+import { Framework } from '../Framework';
+import type { TestStatus } from '../TestStatus';
+import type { TestRecord } from '../types';
+import { MS_PER_SECOND } from '../constants';
+
+const COVER_RE = /@(AC-\d+)\b/g;
+const TAG_RE = /\s*@[\w-]+/g;
+const SCENARIO_SEPARATOR = ', ';
+
+export interface RecordInput {
+  framework: Framework;
+  file: string;
+  describePath: string[];
+  title: string;
+  tags?: string[];
+  status: TestStatus;
+  expectRed: boolean;
+  durationMs: number;
+  message?: string;
+  stack?: string;
+  project: string;
+  set: string;
+}
+
+export function extractCovers(texts: string[]): string[] {
+  const ids = texts.flatMap((text) => [...text.matchAll(COVER_RE)].map((match) => match[1] ?? ''));
+  return [...new Set(ids)];
+}
+
+function splitTitle(title: string): { scenario: string; expected: string } {
+  const at = title.indexOf(SCENARIO_SEPARATOR);
+  if (at < 0) {
+    return { scenario: title, expected: '' };
+  }
+  return { scenario: title.slice(0, at), expected: title.slice(at + SCENARIO_SEPARATOR.length) };
+}
+
+export function buildRecord(input: RecordInput): TestRecord {
+  const method = input.title.replace(TAG_RE, '').trim();
+  const describes = input.describePath.map((title) => title.replace(TAG_RE, '').trim());
+  const suffix = input.framework === Framework.Playwright ? ` [${input.project}]` : '';
+  return {
+    id: [input.file, ...describes, method].join(' > ') + suffix,
+    framework: input.framework,
+    project: input.project,
+    set: input.set,
+    expectRed: input.expectRed,
+    feature: describes[0] ?? input.file,
+    class: describes[describes.length - 1] ?? input.file,
+    method,
+    description: [...describes, method].join(' '),
+    ...splitTitle(method),
+    covers: extractCovers([...(input.tags ?? []), ...input.describePath, input.title]),
+    status: input.status,
+    seconds: input.durationMs / MS_PER_SECOND,
+    message: input.message ?? '',
+    stack: input.stack ?? '',
+  };
+}

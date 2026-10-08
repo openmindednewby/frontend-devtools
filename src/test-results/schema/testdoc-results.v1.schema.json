@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/openmindednewby/Dloizides.Testing/schema/testdoc-results.v1.schema.json",
+  "title": "testdoc-results.v1",
+  "description": "One test run as written by every test-results adapter (.NET trx, Playwright, Jest, Vitest) and read by the test-report renderer. Unknown fields are ignored by readers; a missing schema field or an unknown major version is a hard error.",
+  "type": "object",
+  "required": ["schema", "run", "requirements", "tests"],
+  "properties": {
+    "schema": {
+      "description": "Format name and major version; a minor suffix (testdoc-results.v1.2) stays readable by a v1 reader.",
+      "type": "string",
+      "pattern": "^testdoc-results\\.v1(\\.[0-9]+)?$"
+    },
+    "run": { "$ref": "#/$defs/run" },
+    "requirements": { "type": "array", "items": { "$ref": "#/$defs/requirement" } },
+    "tests": { "type": "array", "items": { "$ref": "#/$defs/test" } }
+  },
+  "$defs": {
+    "run": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "description": "Run folder name, e.g. 20261008-102400 or 2026-10-08T10-24-00." },
+        "repo": { "type": "string" },
+        "sha": { "type": "string" },
+        "startedAt": { "type": "string" },
+        "finishedAt": { "type": "string" },
+        "seconds": { "type": "number", "minimum": 0 },
+        "setFilter": { "type": "string" },
+        "sets": { "type": "array", "items": { "$ref": "#/$defs/set" } }
+      }
+    },
+    "set": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "expectRed": { "type": "boolean" },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["project"],
+            "properties": {
+              "project": { "type": "string" },
+              "trx": { "type": "string" },
+              "log": { "type": "string" }
+            }
+          }
+        },
+        "missing": { "type": "array", "items": { "type": "string" }, "description": "Projects that were expected to run but left no results." }
+      }
+    },
+    "requirement": {
+      "type": "object",
+      "required": ["id", "title", "source"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string" },
+        "source": { "type": "string", "description": "Path of the test file that declares the requirement, relative to its source root, forward slashes." }
+      }
+    },
+    "flow": {
+      "type": "object",
+      "required": ["name", "step"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "step": { "type": "integer" }
+      }
+    },
+    "call": {
+      "type": "object",
+      "required": ["seq", "from", "to"],
+      "properties": {
+        "seq": { "type": "integer", "minimum": 1 },
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "method": { "type": "string" },
+        "path": { "type": "string" },
+        "status": { "type": "integer" }
+      }
+    },
+    "test": {
+      "type": "object",
+      "required": ["id", "framework", "project", "set", "status"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "framework": { "type": "string", "minLength": 1, "description": "Producer of the record: trx, xunit, playwright, jest or vitest." },
+        "project": { "type": "string" },
+        "set": { "type": "string", "minLength": 1 },
+        "expectRed": { "type": "boolean" },
+        "feature": { "type": "string" },
+        "class": { "type": "string" },
+        "method": { "type": "string" },
+        "description": { "type": "string" },
+        "scenario": { "type": "string" },
+        "expected": { "type": "string" },
+        "args": { "type": "string" },
+        "covers": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "flows": { "type": "array", "items": { "$ref": "#/$defs/flow" } },
+        "status": { "enum": ["pass", "fail", "skip", "xfail", "xpass"] },
+        "seconds": { "type": "number", "minimum": 0 },
+        "message": { "type": "string" },
+        "stack": { "type": "string" },
+        "calls": { "type": "array", "items": { "$ref": "#/$defs/call" } }
+      }
+    }
+  }
+}
