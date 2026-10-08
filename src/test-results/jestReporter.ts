@@ -27,46 +27,72 @@ export interface JestRunResults {
   testResults: JestFileResult[];
 }
 
-const STATUS_BY_JEST: Record<string, TestStatus | undefined> = {
-  passed: TestStatus.Pass,
-  failed: TestStatus.Fail,
-};
+interface FileScope {
+  file: string;
+  project: string;
+  set: string;
+  failing: Set<string>;
+}
 
+const PASSED = 'passed';
+const FAILED = 'failed';
 const LINE_BREAK = '\n';
+const ANSI_RE = new RegExp(`${String.fromCharCode(27)}\\[[0-9;]*m`, 'g');
+const FAILING_RE = /\b(?:it|test)\.failing\(\s*(['"`])((?:\\.|(?!\1)[^\\])*)\1/g;
 
-function toRecord(options: Required<Pick<ReporterOptions, 'rootDir' | 'project' | 'set'>>, file: string, assertion: JestAssertion): TestRecord {
-  const { rootDir, project, set } = options;
-  const failure = assertion.failureMessages?.[0] ?? '';
+export function failingTitles(source: string | undefined): Set<string> {
+  return new Set([...(source ?? '').matchAll(FAILING_RE)].map((match) => match[2] ?? ''));
+}
+
+function jestStatus(status: string, failing: boolean): TestStatus {
+  if (status !== PASSED && status !== FAILED) {
+    return TestStatus.Skip;
+  }
+  if (failing) {
+    return status === PASSED ? TestStatus.XFail : TestStatus.XPass;
+  }
+  return status === PASSED ? TestStatus.Pass : TestStatus.Fail;
+}
+
+function toRecord(scope: FileScope, assertion: JestAssertion): TestRecord {
+  const failure = (assertion.failureMessages?.[0] ?? '').replace(ANSI_RE, '');
   const lineEnd = failure.indexOf(LINE_BREAK);
+  const failing = scope.failing.has(assertion.title);
   return buildRecord({
     framework: Framework.Jest,
-    file: relativePath(rootDir, file),
+    file: scope.file,
     describePath: assertion.ancestorTitles,
     title: assertion.title,
-    status: STATUS_BY_JEST[assertion.status] ?? TestStatus.Skip,
-    expectRed: false,
+    status: jestStatus(assertion.status, failing),
+    expectRed: failing,
     durationMs: assertion.duration ?? 0,
     message: lineEnd < 0 ? failure : failure.slice(0, lineEnd),
     stack: lineEnd < 0 ? '' : failure.slice(lineEnd + 1),
-    project,
-    set,
+    project: scope.project,
+    set: scope.set,
   });
 }
 
+/**
+ * Converts a Jest aggregated result into `testdoc-results.v1`; `test.failing` is found by source scan.
+ * @returns the results document
+ */
 export function convertJestResults(
   results: JestRunResults,
   options: ReporterOptions = {},
   readSource?: SourceReader,
 ): TestdocResults {
   const rootDir = options.rootDir ?? process.cwd();
-  const files = results.testResults.map((file) => file.testFilePath);
-  const scope = { rootDir, project: options.project ?? defaultProject(rootDir), set: options.set ?? DEFAULT_SET };
-  const tests = results.testResults.flatMap((file) =>
-    file.testResults.map((assertion) => toRecord(scope, file.testFilePath, assertion)),
-  );
+  const read = readSource ?? fileReader(rootDir);
+  const project = options.project ?? defaultProject(rootDir);
+  const set = options.set ?? DEFAULT_SET;
+  const tests = results.testResults.flatMap((result) => {
+    const scope = { file: relativePath(rootDir, result.testFilePath), project, set, failing: failingTitles(read(result.testFilePath)) };
+    return result.testResults.map((assertion) => toRecord(scope, assertion));
+  });
   return buildDocument(
     runInfo(new Date(results.startTime), new Date(), options.run),
-    requirementsFromFiles(files, readSource ?? fileReader(rootDir), rootDir),
+    requirementsFromFiles(results.testResults.map((result) => result.testFilePath), read, rootDir),
     tests,
   );
 }

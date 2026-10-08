@@ -1,10 +1,10 @@
 import { Framework } from '../Framework';
 import type { TestStatus } from '../TestStatus';
 import type { TestRecord } from '../types';
-import { MS_PER_SECOND } from '../constants';
+import { MS_PER_SECOND, REQUIREMENT_ID } from '../constants';
 
-const COVER_RE = /@(AC-\d+)\b/g;
-const TAG_RE = /\s*@[\w-]+/g;
+const COVER_RE = new RegExp(`@(${REQUIREMENT_ID})`, 'g');
+const TAG_RE = new RegExp(`\\s*@${REQUIREMENT_ID}`, 'g');
 const SCENARIO_SEPARATOR = ', ';
 
 export interface RecordInput {

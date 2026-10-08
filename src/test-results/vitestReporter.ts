@@ -72,9 +72,13 @@ function collect(scope: CollectScope, tasks: VitestTask[], path: string[]): void
   }
 }
 
+export interface VitestConvertOptions extends ReporterOptions {
+  startedAt?: Date;
+}
+
 export function convertVitestFiles(
   files: VitestFile[],
-  options: ReporterOptions = {},
+  options: VitestConvertOptions = {},
   readSource?: SourceReader,
 ): TestdocResults {
   const rootDir = options.rootDir ?? process.cwd();
@@ -86,23 +90,42 @@ export function convertVitestFiles(
   }
   const paths = files.map((file) => file.filepath);
   return buildDocument(
-    runInfo(new Date(), new Date(), options.run),
+    runInfo(options.startedAt ?? new Date(), new Date(), options.run),
     requirementsFromFiles(paths, readSource ?? fileReader(rootDir), rootDir),
     tests,
   );
 }
 
-/** Vitest custom reporter that writes `testdoc-results.v1` when the run finishes. */
+/** Vitest custom reporter that writes `testdoc-results.v1` once per run (Vitest 3 `onTestRunEnd`, else `onFinished`). */
 export default class TestdocVitestReporter {
   private readonly options: ReporterOptions;
+  private startedAt = new Date();
+  private written = false;
 
   constructor(options: ReporterOptions = {}) {
     this.options = options;
   }
 
+  onInit(): void {
+    this.startedAt = new Date();
+    this.written = false;
+  }
+
+  onTestRunEnd(modules: readonly { task: VitestFile }[] = []): void {
+    this.write(modules.map((module) => module.task));
+  }
+
   onFinished(files: VitestFile[] = []): void {
+    this.write(files);
+  }
+
+  private write(files: VitestFile[]): void {
+    if (this.written) {
+      return;
+    }
+    this.written = true;
     const rootDir = this.options.rootDir ?? process.cwd();
     const outputFile = resolve(rootDir, this.options.outputFile ?? DEFAULT_OUTPUT_FILE);
-    writeResults(outputFile, convertVitestFiles(files, this.options));
+    writeResults(outputFile, convertVitestFiles(files, { ...this.options, startedAt: this.startedAt }));
   }
 }

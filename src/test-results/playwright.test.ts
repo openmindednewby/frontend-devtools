@@ -1,5 +1,5 @@
 import { convertPlaywrightReport, type PlaywrightReport } from './playwright';
-import { schemaErrors } from './schema/schemaErrors';
+import { validationErrors } from './schema/validateResults';
 
 const SPEC_FILE = 'checkout/decline.spec.ts';
 const SPEC_SOURCE = `requirements({ "AC-07": "An expired card is declined" });`;
@@ -45,7 +45,7 @@ describe('playwright adapter', () => {
 
     expect(doc.requirements).toEqual([{ id: 'AC-07', title: 'An expired card is declined', source: SPEC_FILE }]);
     expect(doc.tests.map((test) => [test.covers, test.status, test.expectRed])).toEqual([[['AC-07'], 'xfail', true]]);
-    expect(schemaErrors(doc)).toEqual([]);
+    expect(validationErrors(doc)).toEqual([]);
   });
 
   it('with expectedStatus failed and a passing result, maps to xpass', () => {

@@ -4,11 +4,11 @@ import { dirname } from 'path';
 import { SCHEMA_ID } from '../constants';
 import type { RequirementRecord, RunInfo, TestRecord, TestdocResults } from '../types';
 
-const RUN_NAME_LENGTH = 16;
+const RUN_NAME_LENGTH = 19;
 const JSON_INDENT = 2;
 
 export function runName(startedAt: Date): string {
-  return startedAt.toISOString().slice(0, RUN_NAME_LENGTH).replace(':', '-');
+  return startedAt.toISOString().slice(0, RUN_NAME_LENGTH).split(':').join('-');
 }
 
 export function buildDocument(
