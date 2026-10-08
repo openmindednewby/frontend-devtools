@@ -20,11 +20,14 @@ export interface RecordInput {
   stack?: string;
   project: string;
   set: string;
+  declared: ReadonlySet<string>;
 }
 
-export function extractCovers(texts: string[]): string[] {
+const UNDECLARED_REQUIREMENT_RE = /^[A-Z][A-Z0-9]*-\d+$/;
+
+export function extractCovers(texts: string[], declared: ReadonlySet<string>): string[] {
   const ids = texts.flatMap((text) => [...text.matchAll(COVER_RE)].map((match) => match[1] ?? ''));
-  return [...new Set(ids)];
+  return [...new Set(ids)].filter((id) => declared.has(id) || UNDECLARED_REQUIREMENT_RE.test(id));
 }
 
 function splitTitle(title: string): { scenario: string; expected: string } {
@@ -50,7 +53,7 @@ export function buildRecord(input: RecordInput): TestRecord {
     method,
     description: [...describes, method].join(' '),
     ...splitTitle(method),
-    covers: extractCovers([...(input.tags ?? []), ...input.describePath, input.title]),
+    covers: extractCovers([...(input.tags ?? []), ...input.describePath, input.title], input.declared),
     status: input.status,
     seconds: input.durationMs / MS_PER_SECOND,
     message: input.message ?? '',

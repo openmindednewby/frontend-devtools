@@ -1,8 +1,11 @@
 import Ajv2020 from 'ajv/dist/2020';
+import addFormats from 'ajv-formats';
 
 import schemaJson from './testdoc-results.v1.schema.json';
 
-const validate = new Ajv2020({ allErrors: true, strict: false }).compile(schemaJson);
+const ajv = new Ajv2020({ allErrors: true, strict: false });
+addFormats(ajv);
+const validate = ajv.compile(schemaJson);
 
 /**
  * Validates a document against the copied `testdoc-results.v1` JSON Schema with ajv (draft 2020-12).

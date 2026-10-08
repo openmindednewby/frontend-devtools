@@ -23,8 +23,8 @@
         "name": { "type": "string", "minLength": 1, "description": "Run folder name, e.g. 20261008-102400 or 2026-10-08T10-24-00." },
         "repo": { "type": "string" },
         "sha": { "type": "string" },
-        "startedAt": { "type": "string" },
-        "finishedAt": { "type": "string" },
+        "startedAt": { "type": "string", "format": "date-time" },
+        "finishedAt": { "type": "string", "format": "date-time" },
         "seconds": { "type": "number", "minimum": 0 },
         "setFilter": { "type": "string" },
         "sets": { "type": "array", "items": { "$ref": "#/$defs/set" } }
@@ -55,7 +55,7 @@
       "type": "object",
       "required": ["id", "title", "source"],
       "properties": {
-        "id": { "type": "string", "minLength": 1 },
+        "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$" },
         "title": { "type": "string" },
         "source": { "type": "string", "description": "Path of the test file that declares the requirement, relative to its source root, forward slashes." }
       }
@@ -85,7 +85,7 @@
       "required": ["id", "framework", "project", "set", "status"],
       "properties": {
         "id": { "type": "string", "minLength": 1 },
-        "framework": { "type": "string", "minLength": 1, "description": "Producer of the record: trx, xunit, playwright, jest or vitest." },
+        "framework": { "enum": ["xunit", "nunit", "mstest", "playwright", "jest", "vitest"], "description": "Test framework that produced the record." },
         "project": { "type": "string" },
         "set": { "type": "string", "minLength": 1 },
         "expectRed": { "type": "boolean" },
@@ -96,7 +96,7 @@
         "scenario": { "type": "string" },
         "expected": { "type": "string" },
         "args": { "type": "string" },
-        "covers": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "covers": { "type": "array", "items": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$" } },
         "flows": { "type": "array", "items": { "$ref": "#/$defs/flow" } },
         "status": { "enum": ["pass", "fail", "skip", "xfail", "xpass"] },
         "seconds": { "type": "number", "minimum": 0 },

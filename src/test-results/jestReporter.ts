@@ -32,6 +32,7 @@ interface FileScope {
   project: string;
   set: string;
   failing: Set<string>;
+  declared: ReadonlySet<string>;
 }
 
 const PASSED = 'passed';
@@ -70,6 +71,7 @@ function toRecord(scope: FileScope, assertion: JestAssertion): TestRecord {
     stack: lineEnd < 0 ? '' : failure.slice(lineEnd + 1),
     project: scope.project,
     set: scope.set,
+    declared: scope.declared,
   });
 }
 
@@ -86,15 +88,18 @@ export function convertJestResults(
   const read = readSource ?? fileReader(rootDir);
   const project = options.project ?? defaultProject(rootDir);
   const set = options.set ?? DEFAULT_SET;
+  const found = requirementsFromFiles(results.testResults.map((result) => result.testFilePath), read, rootDir);
   const tests = results.testResults.flatMap((result) => {
-    const scope = { file: relativePath(rootDir, result.testFilePath), project, set, failing: failingTitles(read(result.testFilePath)) };
+    const scope: FileScope = {
+      file: relativePath(rootDir, result.testFilePath),
+      project,
+      set,
+      failing: failingTitles(read(result.testFilePath)),
+      declared: found.declaredIn(result.testFilePath),
+    };
     return result.testResults.map((assertion) => toRecord(scope, assertion));
   });
-  return buildDocument(
-    runInfo(new Date(results.startTime), new Date(), options.run),
-    requirementsFromFiles(results.testResults.map((result) => result.testFilePath), read, rootDir),
-    tests,
-  );
+  return buildDocument(runInfo(new Date(results.startTime), new Date(), options.run), found.requirements, tests);
 }
 
 /** Jest custom reporter that writes `testdoc-results.v1` when the run completes. */

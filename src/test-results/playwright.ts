@@ -79,7 +79,7 @@ function placeSpecs(suite: PlaywrightSuite, path: string[], out: PlacedSpec[]): 
   }
 }
 
-function toRecords({ spec, describePath }: PlacedSpec, set: string): TestRecord[] {
+function toRecords({ spec, describePath }: PlacedSpec, set: string, declared: ReadonlySet<string>): TestRecord[] {
   return spec.tests.map((test) => {
     const last = test.results[test.results.length - 1];
     return buildRecord({
@@ -95,6 +95,7 @@ function toRecords({ spec, describePath }: PlacedSpec, set: string): TestRecord[
       stack: last?.error?.stack,
       project: test.projectName !== undefined && test.projectName !== '' ? test.projectName : Framework.Playwright,
       set,
+      declared,
     });
   });
 }
@@ -115,11 +116,12 @@ export function convertPlaywrightReport(
   const startedAt = new Date(report.stats?.startTime ?? Date.now());
   const finishedAt = new Date(startedAt.getTime() + (report.stats?.duration ?? 0));
   const files = placed.map(({ spec }) => spec.file);
-  const readSource = options.readSource ?? fileReader(rootDir);
+  const found = requirementsFromFiles(files, options.readSource ?? fileReader(rootDir), rootDir);
+  const set = options.set ?? DEFAULT_SET;
   return buildDocument(
     runInfo(startedAt, finishedAt, options.run),
-    requirementsFromFiles(files, readSource, rootDir),
-    placed.flatMap((entry) => toRecords(entry, options.set ?? DEFAULT_SET)),
+    found.requirements,
+    placed.flatMap((entry) => toRecords(entry, set, found.declaredIn(entry.spec.file))),
   );
 }
 

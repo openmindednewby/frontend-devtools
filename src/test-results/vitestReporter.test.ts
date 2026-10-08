@@ -25,7 +25,7 @@ describe('convertVitestFiles', () => {
     const doc = convertVitestFiles(files, { rootDir: '/repo', project: 'math' }, () => `requirements({ AC_02: 'Sums' })`);
 
     expect(doc.tests.map((test) => test.status)).toEqual(['pass', 'fail', 'skip', 'xfail', 'xpass']);
-    expect(doc.tests[0]?.covers).toEqual(['AC_02', 'REQ.sum-1']);
+    expect(doc.tests[0]?.covers).toEqual(['AC_02']);
     expect(doc.tests[0]?.method).toBe('with two numbers, adds them');
     expect(doc.requirements).toEqual([{ id: 'AC_02', title: 'Sums', source: 'src/sum.test.ts' }]);
     expect(validationErrors(doc)).toEqual([]);

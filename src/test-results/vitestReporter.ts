@@ -44,6 +44,7 @@ interface CollectScope {
   file: string;
   project: string;
   set: string;
+  declared: ReadonlySet<string>;
   out: TestRecord[];
 }
 
@@ -67,6 +68,7 @@ function collect(scope: CollectScope, tasks: VitestTask[], path: string[]): void
         stack: error?.stack,
         project: scope.project,
         set: scope.set,
+        declared: scope.declared,
       }),
     );
   }
@@ -85,15 +87,13 @@ export function convertVitestFiles(
   const tests: TestRecord[] = [];
   const project = options.project ?? defaultProject(rootDir);
   const set = options.set ?? DEFAULT_SET;
-  for (const file of files) {
-    collect({ file: relativePath(rootDir, file.filepath), project, set, out: tests }, file.tasks, []);
-  }
   const paths = files.map((file) => file.filepath);
-  return buildDocument(
-    runInfo(options.startedAt ?? new Date(), new Date(), options.run),
-    requirementsFromFiles(paths, readSource ?? fileReader(rootDir), rootDir),
-    tests,
-  );
+  const found = requirementsFromFiles(paths, readSource ?? fileReader(rootDir), rootDir);
+  for (const file of files) {
+    const declared = found.declaredIn(file.filepath);
+    collect({ file: relativePath(rootDir, file.filepath), project, set, declared, out: tests }, file.tasks, []);
+  }
+  return buildDocument(runInfo(options.startedAt ?? new Date(), new Date(), options.run), found.requirements, tests);
 }
 
 /** Vitest custom reporter that writes `testdoc-results.v1` once per run (Vitest 3 `onTestRunEnd`, else `onFinished`). */

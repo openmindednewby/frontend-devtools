@@ -108,12 +108,20 @@ function warn(problem: RequirementProblem): void {
   process.stderr.write(`testdoc: ${problem.file}:${problem.line} requirement skipped, not a literal: ${problem.text}\n`);
 }
 
+export interface FileRequirements {
+  requirements: RequirementRecord[];
+  declaredIn: (file: string) => ReadonlySet<string>;
+}
+
+const NONE: ReadonlySet<string> = new Set();
+
 export function requirementsFromFiles(
   files: string[],
   readSource: SourceReader,
   rootDir: string,
-): RequirementRecord[] {
+): FileRequirements {
   const byId = new Map<string, RequirementRecord>();
+  const byFile = new Map<string, ReadonlySet<string>>();
   for (const file of new Set(files)) {
     const source = readSource(file);
     if (source === undefined) {
@@ -121,11 +129,12 @@ export function requirementsFromFiles(
     }
     const parsed = parseRequirements(source, relativePath(rootDir, file));
     parsed.problems.forEach(warn);
+    byFile.set(file, new Set(parsed.requirements.map((requirement) => requirement.id)));
     for (const requirement of parsed.requirements) {
       if (!byId.has(requirement.id)) {
         byId.set(requirement.id, requirement);
       }
     }
   }
-  return [...byId.values()];
+  return { requirements: [...byId.values()], declaredIn: (file) => byFile.get(file) ?? NONE };
 }
