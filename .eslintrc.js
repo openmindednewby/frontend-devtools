@@ -30,5 +30,5 @@ module.exports = {
   },
   // The .mjs rule implementations are vendored ESLint rules (not part of the
   // package's own typed source) and the generated dist/test files are excluded.
-  ignorePatterns: ['dist/', 'node_modules/', '*.js', '**/*.mjs', '**/*.test.ts'],
+  ignorePatterns: ['dist/', 'node_modules/', '*.js', '**/*.mjs', '**/*.test.ts', 'src/**/e2e/**'],
 };
