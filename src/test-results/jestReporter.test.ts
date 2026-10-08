@@ -50,7 +50,7 @@ describe('jest reporter', () => {
 
 describe('convertJestResults', () => {
   it('with test.failing in source, maps a thrown test to xfail and a passing one to xpass', () => {
-    const source = "test.failing('with Infinity, throws', f);\nit.failing(\"with -0, keeps the sign\", f);";
+    const source = "describe('formatAmount', () => {\ntest.failing('with Infinity, throws', f);\nit.failing(\"with -0, keeps the sign\", f);\n});";
     const run = {
       startTime: 0,
       testResults: [
@@ -67,5 +67,25 @@ describe('convertJestResults', () => {
       ['xfail', true],
       ['xpass', true],
     ]);
+  });
+
+  it('with the same title failing in one describe only, marks only that test as expected red', () => {
+    const source = [
+      "describe('parse', () => {",
+      "  test.failing('with a tab, throws', f);",
+      '});',
+      "describe('format', () => {",
+      "  test('with a tab, throws', f);",
+      '});',
+    ].join('\n');
+    const inDescribe = (describeTitle: string): JestAssertion => ({
+      ...assertion('with a tab, throws', 'passed'),
+      ancestorTitles: [describeTitle],
+    });
+    const run = { startTime: 0, testResults: [{ testFilePath: '/repo/b.test.ts', testResults: [inDescribe('parse'), inDescribe('format')] }] };
+
+    const doc = convertJestResults(run, { rootDir: '/repo' }, () => source);
+
+    expect(doc.tests.map((test) => test.status)).toEqual(['xfail', 'pass']);
   });
 });

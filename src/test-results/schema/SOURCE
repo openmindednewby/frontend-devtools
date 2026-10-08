@@ -1,3 +1,4 @@
 source: NuGetPackages/Dloizides.Testing/schema/testdoc-results.v1.schema.json
 source-sha: 82e63af (copied 2026-10-08)
 deviation: none (byte copy of git show 82e63af:schema/testdoc-results.v1.schema.json)
+skip: when the sibling repo is absent (package CI), validateResults.test.ts logs console.warn and skips with a named "SKIPPED schema-copy check" title; the copy is then unverified

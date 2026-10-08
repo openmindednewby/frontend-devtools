@@ -6,6 +6,7 @@ import { MS_PER_SECOND, REQUIREMENT_ID } from '../constants';
 const COVER_RE = new RegExp(`@(${REQUIREMENT_ID})`, 'g');
 const TAG_RE = new RegExp(`\\s*@${REQUIREMENT_ID}`, 'g');
 const SCENARIO_SEPARATOR = ', ';
+const TRAILING_PUNCTUATION_RE = /[._-]+$/;
 
 export interface RecordInput {
   framework: Framework;
@@ -26,7 +27,9 @@ export interface RecordInput {
 const UNDECLARED_REQUIREMENT_RE = /^[A-Z][A-Z0-9]*-\d+$/;
 
 export function extractCovers(texts: string[], declared: ReadonlySet<string>): string[] {
-  const ids = texts.flatMap((text) => [...text.matchAll(COVER_RE)].map((match) => match[1] ?? ''));
+  const ids = texts.flatMap((text) =>
+    [...text.matchAll(COVER_RE)].map((match) => (match[1] ?? '').replace(TRAILING_PUNCTUATION_RE, '')),
+  );
   return [...new Set(ids)].filter((id) => declared.has(id) || UNDECLARED_REQUIREMENT_RE.test(id));
 }
 

@@ -38,9 +38,15 @@ describe('validationErrors', () => {
   });
 });
 
+const SKIP_REASON = `SKIPPED schema-copy check: Dloizides.Testing source not found at ${SOURCE}; copy unverified`;
+
 describe('schema copy', () => {
+  if (!SOURCE_PRESENT) {
+    console.warn(SKIP_REASON);
+  }
+
   (SOURCE_PRESENT ? it : it.skip)(
-    `with the Dloizides.Testing repo beside this one, equals its schema (skipped when ${SOURCE} is absent)`,
+    SOURCE_PRESENT ? 'with the Dloizides.Testing repo beside this one, equals its schema' : SKIP_REASON,
     () => {
       const source: unknown = JSON.parse(readFileSync(SOURCE, 'utf8'));
 

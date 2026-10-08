@@ -5,6 +5,7 @@ import { Framework } from './Framework';
 import { TestStatus } from './TestStatus';
 import type { ReporterOptions, SourceReader, TestRecord, TestdocResults } from './types';
 import { buildDocument, runInfo, writeResults } from './utils/document';
+import { failingKeys, KEY_SEPARATOR } from './utils/failingTests';
 import { defaultProject, fileReader, relativePath } from './utils/paths';
 import { buildRecord } from './utils/record';
 import { requirementsFromFiles } from './utils/sourceRequirements';
@@ -39,11 +40,6 @@ const PASSED = 'passed';
 const FAILED = 'failed';
 const LINE_BREAK = '\n';
 const ANSI_RE = new RegExp(`${String.fromCharCode(27)}\\[[0-9;]*m`, 'g');
-const FAILING_RE = /\b(?:it|test)\.failing\(\s*(['"`])((?:\\.|(?!\1)[^\\])*)\1/g;
-
-export function failingTitles(source: string | undefined): Set<string> {
-  return new Set([...(source ?? '').matchAll(FAILING_RE)].map((match) => match[2] ?? ''));
-}
 
 function jestStatus(status: string, failing: boolean): TestStatus {
   if (status !== PASSED && status !== FAILED) {
@@ -58,7 +54,7 @@ function jestStatus(status: string, failing: boolean): TestStatus {
 function toRecord(scope: FileScope, assertion: JestAssertion): TestRecord {
   const failure = (assertion.failureMessages?.[0] ?? '').replace(ANSI_RE, '');
   const lineEnd = failure.indexOf(LINE_BREAK);
-  const failing = scope.failing.has(assertion.title);
+  const failing = scope.failing.has([...assertion.ancestorTitles, assertion.title].join(KEY_SEPARATOR));
   return buildRecord({
     framework: Framework.Jest,
     file: scope.file,
@@ -94,7 +90,7 @@ export function convertJestResults(
       file: relativePath(rootDir, result.testFilePath),
       project,
       set,
-      failing: failingTitles(read(result.testFilePath)),
+      failing: failingKeys(read(result.testFilePath)),
       declared: found.declaredIn(result.testFilePath),
     };
     return result.testResults.map((assertion) => toRecord(scope, assertion));

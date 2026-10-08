@@ -107,6 +107,18 @@ export default class TestdocVitestReporter {
   }
 
   onInit(): void {
+    this.startRun();
+  }
+
+  onTestRunStart(): void {
+    this.startRun();
+  }
+
+  onWatcherRerun(): void {
+    this.startRun();
+  }
+
+  private startRun(): void {
     this.startedAt = new Date();
     this.written = false;
   }

@@ -20,11 +20,11 @@ interface Piece {
 
 const CALL_RE = /\brequirements\(\s*\{/g;
 const KEY_RE = new RegExp(`^(['"\`]?)(${REQUIREMENT_ID})\\1$`);
-const QUOTES = '\'"`';
+export const QUOTES = '\'"`';
 const ESCAPE_RE = /\\(.)/g;
 const TEMPLATE_HOLE = '${';
 
-function skipString(src: string, start: number): number {
+export function skipString(src: string, start: number): number {
   const quote = src[start];
   let i = start + 1;
   while (i < src.length && src[i] !== quote) {

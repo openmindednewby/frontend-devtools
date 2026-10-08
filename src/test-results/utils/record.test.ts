@@ -17,6 +17,14 @@ describe('extractCovers', () => {
     expect(covers).toEqual(['AC-12', 'ER-3']);
   });
 
+  it('with a tag ending a sentence, drops the trailing punctuation before matching', () => {
+    const declared = new Set(['REQ.sum-1']);
+
+    const covers = extractCovers(['covers @AC-07.', 'and @REQ.sum-1.'], declared);
+
+    expect(covers).toEqual(['AC-07', 'REQ.sum-1']);
+  });
+
   it('with undeclared plain tags, ignores them', () => {
     const declared = new Set(['AC-01']);
 
