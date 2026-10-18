@@ -13,6 +13,7 @@
     },
     "run": { "$ref": "#/$defs/run" },
     "requirements": { "type": "array", "items": { "$ref": "#/$defs/requirement" } },
+    "features": { "type": "array", "items": { "$ref": "#/$defs/feature" }, "description": "Assembly-level [Feature] declarations: why each report area exists." },
     "tests": { "type": "array", "items": { "$ref": "#/$defs/test" } }
   },
   "$defs": {
@@ -60,6 +61,24 @@
         "source": { "type": "string", "description": "Path of the test file that declares the requirement, relative to its source root, forward slashes." }
       }
     },
+    "feature": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "why": { "type": "string" },
+        "context": { "type": "string" },
+        "owner": { "type": "string" }
+      }
+    },
+    "useCase": {
+      "type": "object",
+      "required": ["text"],
+      "properties": {
+        "text": { "type": "string", "minLength": 1 },
+        "actor": { "type": "string" }
+      }
+    },
     "flow": {
       "type": "object",
       "required": ["name", "step"],
@@ -98,6 +117,7 @@
         "args": { "type": "string" },
         "covers": { "type": "array", "items": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$" } },
         "flows": { "type": "array", "items": { "$ref": "#/$defs/flow" } },
+        "useCases": { "type": "array", "items": { "$ref": "#/$defs/useCase" } },
         "status": { "enum": ["pass", "fail", "skip", "xfail", "xpass"] },
         "seconds": { "type": "number", "minimum": 0 },
         "message": { "type": "string" },

@@ -17,6 +17,10 @@ NAV-1 "Every game menu works with arrow keys and controller", phase 3.
 - `gameConfig` flat-config preset (`GAME_RULE_NAMES`): enables `game-menu-focusable` at `error`. Not part of
   `recommendedConfig`; game repos opt in.
 
+### Changed
+
+- `testdoc-results.v1.schema.json` copy synced to Dloizides.Testing 7fbf809 (adds the optional `features` array).
+
 ## [1.5.0] - 2026-10-07
 
 KEFI-ACT-1 "Same attendee actions everywhere" (generalized: one row-action source per entity, every portal).
