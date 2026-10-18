@@ -30,6 +30,16 @@ export const rowActionsConfig: FlatConfig = {
   },
 };
 
+export const GAME_RULE_NAMES: readonly string[] = ['game-menu-focusable'];
+
+/** The game preset: menus stay walkable with arrow keys and a controller (NAV-1). Game repos only. */
+export const gameConfig: FlatConfig = {
+  plugins: commentsConfig.plugins,
+  rules: {
+    '@dloizides/game-menu-focusable': 'error',
+  },
+};
+
 /** The recommended flat-config block: every rule the pack enables by default, at error. */
 export const recommendedConfig: FlatConfig = {
   plugins: commentsConfig.plugins,

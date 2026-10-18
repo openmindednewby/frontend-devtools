@@ -10,8 +10,10 @@ export { plugin, rules, ruleNames } from './plugin';
 export { legacyPlugins } from './legacy';
 export {
   COMMENT_RULE_NAMES,
+  GAME_RULE_NAMES,
   ROW_ACTION_RULE_NAMES,
   commentsConfig,
+  gameConfig,
   recommendedConfig,
   rowActionsConfig,
 } from './configs';

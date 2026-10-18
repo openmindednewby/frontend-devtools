@@ -10,6 +10,7 @@ import enforceModuleStructure from '../rules/enforce-module-structure.js';
 import enforceRoutePreload from '../rules/enforce-route-preload.js';
 import enforceTestColocation from '../rules/enforce-test-colocation.js';
 import enumFileIsolation from '../rules/enum-file-isolation.js';
+import gameMenuFocusable from '../rules/game-menu-focusable.js';
 import i18nInterpolation from '../rules/i18n-interpolation.js';
 import i18nParamNames from '../rules/i18n-param-names.js';
 import noComments from '../rules/no-comments.js';
@@ -37,6 +38,7 @@ const ruleModules: readonly SingleRulePlugin[] = [
   enforceRoutePreload,
   enforceTestColocation,
   enumFileIsolation,
+  gameMenuFocusable,
   i18nInterpolation,
   i18nParamNames,
   noBarrelCompanionFile,

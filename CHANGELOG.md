@@ -5,6 +5,18 @@ All notable changes to `@dloizides/frontend-devtools` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2026-10-19
+
+NAV-1 "Every game menu works with arrow keys and controller", phase 3.
+
+### Added
+
+- `game-menu-focusable`: reports a `click` / `pointerdown` / `pointerup` listener or `onclick =` on an element created as
+  `div` / `span` / `li` / `img` whose variable never gets `tabIndex` / `role` (property or `setAttribute`), and every
+  `stopPropagation()` inside a `keydown` / `onkeydown` handler (inline, named function or const). No options, no autofix.
+- `gameConfig` flat-config preset (`GAME_RULE_NAMES`): enables `game-menu-focusable` at `error`. Not part of
+  `recommendedConfig`; game repos opt in.
+
 ## [1.5.0] - 2026-10-07
 
 KEFI-ACT-1 "Same attendee actions everywhere" (generalized: one row-action source per entity, every portal).
