@@ -36,6 +36,13 @@ ruleTester.run('no-raw-backend-fetch', rule, {
     { code: "import type { AxiosInstance } from 'axios';", filename: APP_FILE },
     { code: "import { type AxiosError, type AxiosInstance } from 'axios';", filename: APP_FILE },
     { code: RAW_FETCH, filename: '/repo/erevna-web/src/lib/api/apiClient.ts', options: [{ allow: ['/src/lib/api/'] }] },
+    { code: "export const load = () => fetch('https://dummyjson.com/products');", filename: COMPONENT_FILE },
+    { code: "export const ping = () => fetch('https://analytics.dloizides.com');", filename: COMPONENT_FILE },
+    { code: 'export const load = (id: string) => fetch(`https://dummyjson.com/products/${id}`);', filename: COMPONENT_FILE },
+    { code: 'const url = URL.createObjectURL(file); const blob = await fetch(url);', filename: COMPONENT_FILE },
+    { code: 'const blob = await fetch(window.URL.createObjectURL(file));', filename: COMPONENT_FILE },
+    { code: 'const reader = new FileReader(); reader.onload = () => fetch(reader.result as string);', filename: COMPONENT_FILE },
+    { code: 'const reader = new FileReader(); const uri = reader.result as string; void fetch(uri);', filename: COMPONENT_FILE },
   ],
 
   invalid: [
@@ -50,5 +57,12 @@ ruleTester.run('no-raw-backend-fetch', rule, {
     { code: "const mod = await import('axios');", filename: APP_FILE, errors: [{ messageId: 'rawAxios' }] },
     { code: RAW_FETCH, filename: 'C:\\repo\\kefi-web\\src\\auth\\verifyEmailApi.ts', errors: [{ messageId: 'rawFetch' }] },
     { code: RAW_FETCH, filename: '/repo/erevna-web/src/lib/api/apiClient.ts', options: [{ allow: ['/src/other/'] }], errors: [{ messageId: 'rawFetch' }] },
+    { code: 'export const load = (host: string) => fetch(`https://${host}/api/users`);', filename: APP_FILE, errors: [{ messageId: 'rawFetch' }] },
+    { code: 'export const load = () => fetch(`https://api.${domain}/users`);', filename: APP_FILE, errors: [{ messageId: 'rawFetch' }] },
+    { code: "export const load = () => fetch('//cdn.example.com/x');", filename: APP_FILE, errors: [{ messageId: 'rawFetch' }] },
+    { code: 'let url = URL.createObjectURL(file); url = next; void fetch(url);', filename: APP_FILE, errors: [{ messageId: 'rawFetch' }] },
+    { code: 'const url = makeUrl(file); void fetch(url);', filename: APP_FILE, errors: [{ messageId: 'rawFetch' }] },
+    { code: 'const reader = makeReader(); void fetch(reader.result);', filename: APP_FILE, errors: [{ messageId: 'rawFetch' }] },
+    { code: 'void fetch(URL.revokeObjectURL(file));', filename: APP_FILE, errors: [{ messageId: 'rawFetch' }] },
   ],
 });

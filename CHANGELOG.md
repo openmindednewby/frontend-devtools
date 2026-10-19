@@ -5,6 +5,17 @@ All notable changes to `@dloizides/frontend-devtools` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.0] - 2026-10-19
+
+PATTERN-1.4 "TypeScript pattern rules as ESLint rules", `no-raw-backend-fetch` (PAT-API-1 "web apps call the backend through the shared client") hardening.
+
+### Changed
+- `no-raw-backend-fetch` no longer reports `fetch` of a literal absolute `http(s)://host/...` URL (third-party), or of a value produced by `URL.createObjectURL(...)` / `new FileReader().result` (direct, or via a single `const`).
+- `no-raw-backend-fetch` registers no visitors when the parsed AST is not an ESTree `Program` (non-JS languages under an unscoped `apiConfig`).
+
+### Tests
+- `apiConfigUnscoped.test.ts`: `apiConfig` without `files` lints `.js`/`.mjs`/`.cjs`, build output and a 2000-deep nested file without throwing, and still reports under `src/`.
+
 ## [1.8.0] - 2026-10-19
 
 PATTERN-1.4 "TypeScript pattern rules as ESLint rules", row PAT-API-1 "web apps call the backend through the shared client".
