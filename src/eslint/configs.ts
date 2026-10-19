@@ -40,8 +40,18 @@ export const gameConfig: FlatConfig = {
   },
 };
 
+export const API_RULE_NAMES: readonly string[] = ['no-raw-backend-fetch'];
+
+/** PAT-API-1: the backend is called through the shared client or generated hooks, never raw fetch/axios. */
+export const apiConfig: FlatConfig = {
+  plugins: commentsConfig.plugins,
+  rules: {
+    '@dloizides/no-raw-backend-fetch': 'error',
+  },
+};
+
 /** The recommended flat-config block: every rule the pack enables by default, at error. */
 export const recommendedConfig: FlatConfig = {
   plugins: commentsConfig.plugins,
-  rules: { ...commentsConfig.rules, ...rowActionsConfig.rules },
+  rules: { ...commentsConfig.rules, ...rowActionsConfig.rules, ...apiConfig.rules },
 };

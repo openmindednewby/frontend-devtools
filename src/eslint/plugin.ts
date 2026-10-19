@@ -21,6 +21,7 @@ import noGeneratedModelsBarrelValueImport from '../rules/no-generated-models-bar
 import noNullCheck from '../rules/no-null-check.js';
 import noOptionalUndefined from '../rules/no-optional-undefined.js';
 import noProductImportsInShared from '../rules/no-product-imports-in-shared.js';
+import noRawBackendFetch from '../rules/no-raw-backend-fetch.js';
 import noRawColorLiteral from '../rules/no-raw-color-literal.js';
 import preferConstEnum from '../rules/prefer-const-enum.js';
 import requireStableHookArgs from '../rules/require-stable-hook-args.js';
@@ -49,6 +50,7 @@ const ruleModules: readonly SingleRulePlugin[] = [
   noNullCheck,
   noOptionalUndefined,
   noProductImportsInShared,
+  noRawBackendFetch,
   noRawColorLiteral,
   preferConstEnum,
   requireStableHookArgs,

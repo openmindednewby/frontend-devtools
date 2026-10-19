@@ -25,6 +25,7 @@ const EXPECTED_RULE_NAMES = [
   'no-null-check',
   'no-optional-undefined',
   'no-product-imports-in-shared',
+  'no-raw-backend-fetch',
   'no-raw-color-literal',
   'prefer-const-enum',
   'require-stable-hook-args',
@@ -33,7 +34,7 @@ const EXPECTED_RULE_NAMES = [
 ].sort();
 
 describe('frontend-devtools eslint plugin', () => {
-  it('exposes all 23 shared rules', () => {
+  it('exposes all 24 shared rules', () => {
     expect(ruleNames).toEqual(EXPECTED_RULE_NAMES);
   });
 

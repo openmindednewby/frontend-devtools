@@ -5,6 +5,17 @@ All notable changes to `@dloizides/frontend-devtools` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] - 2026-10-19
+
+PATTERN-1.4 "TypeScript pattern rules as ESLint rules", row PAT-API-1 "web apps call the backend through the shared client".
+
+### Added
+
+- `no-raw-backend-fetch`: reports `fetch(` / `window.fetch(` / `globalThis.fetch(` / `self.fetch(` and value imports of `axios`
+  (`import`, `require`, `import()`) in `src/**`. Exempt: `src/server/`, `src/http/`, `src/lib/http/`, `packages/*-client/`,
+  `/generated/`, service worker files, `app/+html.*`, tests, `data:`/`blob:` URLs, `import type` from axios. Option `{ allow: string[] }`.
+- `apiConfig` flat-config preset (`API_RULE_NAMES`) at `error`; included in `recommendedConfig`.
+
 ## [1.7.0] - 2026-10-19
 
 NAV-1 "Every game menu works with arrow keys and controller", phase 3.

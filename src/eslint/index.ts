@@ -9,9 +9,11 @@
 export { plugin, rules, ruleNames } from './plugin';
 export { legacyPlugins } from './legacy';
 export {
+  API_RULE_NAMES,
   COMMENT_RULE_NAMES,
   GAME_RULE_NAMES,
   ROW_ACTION_RULE_NAMES,
+  apiConfig,
   commentsConfig,
   gameConfig,
   recommendedConfig,
