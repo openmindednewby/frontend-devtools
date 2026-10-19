@@ -21,6 +21,7 @@ module.exports = {
   },
   rules: {
     '@typescript-eslint/no-explicit-any': 'error',
+    'import/no-unresolved': ['error', { ignore: ['^eslint-plugin-react-you-might-not-need-an-effect$'] }],
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/no-non-null-assertion': 'error',

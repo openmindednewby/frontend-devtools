@@ -5,6 +5,15 @@ All notable changes to `@dloizides/frontend-devtools` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.0] - 2026-10-19
+
+PATTERN-1.12 "TS rule packs + house rules in frontend-devtools" (D-PAT-12 "Whole rule packs as warnings, one shared approach").
+
+### Added
+- `patternPacksConfig`: the recommended rules of `@tanstack/eslint-plugin-query`, `eslint-plugin-react-you-might-not-need-an-effect`, `eslint-plugin-boundaries` and `eslint-plugin-sonarjs`, every rule at `warn`, plus the house rules.
+- `query-key-factory` (PAT-QUERY-KEY-1 "queryKey only from a key factory"): flags an inline array/string/template `queryKey`; key-factory files (`*Keys.ts`), tests and generated code are exempt; `allow` adds path fragments.
+- `HOUSE_PATTERN_RULE_NAMES`.
+
 ## [1.9.0] - 2026-10-19
 
 PATTERN-1.4 "TypeScript pattern rules as ESLint rules", `no-raw-backend-fetch` (PAT-API-1 "web apps call the backend through the shared client") hardening.

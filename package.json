@@ -137,5 +137,11 @@
     "ts-jest": "^29.1.0",
     "tsup": "^8.0.0",
     "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "@tanstack/eslint-plugin-query": "^5.104.5",
+    "eslint-plugin-boundaries": "^7.2.0",
+    "eslint-plugin-react-you-might-not-need-an-effect": "^1.0.2",
+    "eslint-plugin-sonarjs": "^4.2.2"
   }
 }
