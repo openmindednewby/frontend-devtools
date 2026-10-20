@@ -1,6 +1,6 @@
 {
   "name": "@dloizides/frontend-devtools",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Shared RN-web dev tooling (dev-only) for the dloizides.com SaaS frontends: the custom ESLint plugin pack and rule packs (/eslint) and the test-results reporters (/test-results). initI18n moved to @dloizides/i18n in 2.0.0. Never imports a product.",
   "keywords": [
     "eslint",
