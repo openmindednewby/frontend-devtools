@@ -1,12 +1,10 @@
 {
   "name": "@dloizides/frontend-devtools",
   "version": "1.10.0",
-  "description": "Shared RN-web dev tooling for the dloizides.com SaaS frontends: the 17-rule custom ESLint plugin pack (also at the /eslint subpath) and the parameterized initI18n() i18next + react-i18next init factory. Owned shape erevna-web / katalogos-web / kefi-web shared byte-for-byte; never imports a product.",
+  "description": "Shared RN-web dev tooling (dev-only) for the dloizides.com SaaS frontends: the custom ESLint plugin pack and rule packs (/eslint) and the test-results reporters (/test-results). initI18n moved to @dloizides/i18n in 2.0.0. Never imports a product.",
   "keywords": [
     "eslint",
     "eslint-plugin",
-    "i18next",
-    "react-i18next",
     "react-native",
     "dev-tooling",
     "dloizides"
@@ -26,20 +24,7 @@
     "README.md",
     "CHANGELOG.md"
   ],
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "require": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "import": {
-        "types": "./dist/index.d.mts",
-        "default": "./dist/index.mjs"
-      }
-    },
     "./eslint": {
       "require": {
         "types": "./dist/eslint/index.d.ts",
@@ -103,18 +88,10 @@
     "prepublishOnly": "npm run clean && npm run build && npm run test"
   },
   "peerDependencies": {
-    "eslint": ">=8.0.0",
-    "i18next": ">=23.0.0",
-    "react-i18next": ">=13.0.0"
+    "eslint": ">=8.0.0"
   },
   "peerDependenciesMeta": {
     "eslint": {
-      "optional": true
-    },
-    "i18next": {
-      "optional": true
-    },
-    "react-i18next": {
       "optional": true
     }
   },
@@ -128,11 +105,9 @@
     "ajv-formats": "^3.0.1",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.32.0",
-    "i18next": "^23.0.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "react": "^18.0.0",
-    "react-i18next": "^13.0.0",
     "rimraf": "^5.0.0",
     "ts-jest": "^29.1.0",
     "tsup": "^8.0.0",

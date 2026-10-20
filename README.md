@@ -6,11 +6,10 @@ product-agnostic concerns that were duplicated byte-for-byte across
 
 1. The **custom ESLint rule pack** (17 rules) — previously 17 identical
    `eslint-plugins/*.mjs` files in each app.
-2. **`initI18n()`** — the parameterized i18next + react-i18next init factory —
-   previously an identical `src/localization/i18n.ts` in each app.
+2. **`initI18n()` moved to `@dloizides/i18n` in 2.0.0** — this package is dev-only:
+   `import { initI18n } from '@dloizides/i18n';` (same signature).
 
-> **Decoupling:** the package owns the *logic* (rule implementations + the
-> i18next `.use().init()` chain). Each app owns its *config* — which rules it
+> **Decoupling:** the package owns the *logic* (rule implementations). Each app owns its *config* — which rules it
 > enables and with what options, plus its own `locales/*.json` strings.
 > This package **never imports a product**.
 
@@ -20,12 +19,12 @@ product-agnostic concerns that were duplicated byte-for-byte across
 npm install -D @dloizides/frontend-devtools
 ```
 
-`eslint`, `i18next`, and `react-i18next` are optional peer dependencies — apps
-that only use one half don't need the other's peers.
+`eslint` is an optional peer dependency. There is no root entry since 2.0.0: import from
+`@dloizides/frontend-devtools/eslint` or `@dloizides/frontend-devtools/test-results`.
 
 ## ESLint rule pack
 
-Import from the root or the `/eslint` subpath. Three shapes are exported:
+Import from the `/eslint` subpath. Three shapes are exported:
 
 | Export | Use when |
 | --- | --- |
@@ -136,37 +135,13 @@ by `recommendedConfig` and `rowActionsConfig`.
 `ruleNames` exports the sorted list for migration assertions (prove no rule was
 dropped).
 
-## i18n init factory
+## i18n init factory — moved
+
+`initI18n` and `InitI18nOptions` live in `@dloizides/i18n` (>= 1.1.0) since 2.0.0:
 
 ```ts
-// src/localization/i18n.ts
-import { initI18n } from '@dloizides/frontend-devtools';
-import * as Localization from 'expo-localization';
-import en from './locales/en.json';
-
-const i18n = initI18n({
-  resources: { en: { translation: en } },
-  lng: Localization.getLocales()[0]?.languageCode, // optional; defaults to fallback
-});
-
-export default i18n;
+import { initI18n } from '@dloizides/i18n';
 ```
-
-### `InitI18nOptions`
-
-| Field | Type | Default | Notes |
-| --- | --- | --- | --- |
-| `resources` | `Resource` | — (required) | App-owned strings bundle. |
-| `lng` | `string` | `fallbackLng` | Active language. |
-| `fallbackLng` | `string` | `'en'` | Fallback for missing keys. |
-| `escapeValue` | `boolean` | `false` | React already escapes output. |
-| `defaultNS` | `string \| string[]` | i18next default | Optional. |
-| `ns` | `string \| string[]` | — | Optional; for multi-namespace apps. |
-
-The factory wires `react-i18next` into the i18next singleton, runs `.init()`,
-swallows the (synchronous-for-in-memory) init rejection, and returns the
-singleton. The `FM()` / `FD()` helpers + `locales/*.json` stay **app-owned**
-(per the SaaS code standards).
 
 ## Scripts
 

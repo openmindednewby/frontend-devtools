@@ -5,6 +5,15 @@ All notable changes to `@dloizides/frontend-devtools` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-10-20
+
+D-PAT-15 "Move initI18n out of frontend-devtools so it is dev-only".
+
+### Removed (BREAKING)
+- `initI18n` and `InitI18nOptions`: import them from `@dloizides/i18n` (>= 1.1.0), same signature: `import { initI18n } from '@dloizides/i18n';`.
+- The root entry (`@dloizides/frontend-devtools`): it exported only `initI18n`. Use the `/eslint` and `/test-results` subpaths.
+- The `i18next` and `react-i18next` optional peer dependencies.
+
 ## [1.10.0] - 2026-10-19
 
 PATTERN-1.12 "TS rule packs + house rules in frontend-devtools" (D-PAT-12 "Whole rule packs as warnings, one shared approach").

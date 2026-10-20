@@ -2,7 +2,6 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: [
-    'src/index.ts',
     'src/eslint/index.ts',
     'src/test-results/index.ts',
     'src/test-results/jestReporter.ts',
