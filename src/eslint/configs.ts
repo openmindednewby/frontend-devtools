@@ -50,6 +50,16 @@ export const apiConfig: FlatConfig = {
   },
 };
 
+export const REUSE_RULE_NAMES: readonly string[] = ['no-reimplemented-package'];
+
+/** QUAL-ADOPT-1: app code may not re-implement a capability a shared @dloizides package provides. Opt-in. */
+export const reuseConfig: FlatConfig = {
+  plugins: commentsConfig.plugins,
+  rules: {
+    '@dloizides/no-reimplemented-package': 'error',
+  },
+};
+
 /** The recommended flat-config block: every rule the pack enables by default, at error. */
 export const recommendedConfig: FlatConfig = {
   plugins: commentsConfig.plugins,

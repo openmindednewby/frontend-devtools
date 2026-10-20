@@ -23,6 +23,7 @@ import noOptionalUndefined from '../rules/no-optional-undefined.js';
 import noProductImportsInShared from '../rules/no-product-imports-in-shared.js';
 import noRawBackendFetch from '../rules/no-raw-backend-fetch.js';
 import noRawColorLiteral from '../rules/no-raw-color-literal.js';
+import noReimplementedPackage from '../rules/no-reimplemented-package.js';
 import preferConstEnum from '../rules/prefer-const-enum.js';
 import queryKeyFactory from '../rules/query-key-factory.js';
 import requireStableHookArgs from '../rules/require-stable-hook-args.js';
@@ -53,6 +54,7 @@ const ruleModules: readonly SingleRulePlugin[] = [
   noProductImportsInShared,
   noRawBackendFetch,
   noRawColorLiteral,
+  noReimplementedPackage,
   preferConstEnum,
   queryKeyFactory,
   requireStableHookArgs,

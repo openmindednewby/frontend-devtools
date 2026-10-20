@@ -13,11 +13,13 @@ export {
   API_RULE_NAMES,
   COMMENT_RULE_NAMES,
   GAME_RULE_NAMES,
+  REUSE_RULE_NAMES,
   ROW_ACTION_RULE_NAMES,
   apiConfig,
   commentsConfig,
   gameConfig,
   recommendedConfig,
+  reuseConfig,
   rowActionsConfig,
 } from './configs';
 export type {
