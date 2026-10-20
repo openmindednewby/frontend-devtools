@@ -13,6 +13,16 @@ function isExemptFile(path, allow) {
   return allow.some((fragment) => path.includes(fragment));
 }
 
+const MODULE_DECLARATIONS = new Set(['ImportDeclaration', 'ExportNamedDeclaration', 'ExportAllDeclaration']);
+
+function usesPackage(program, packageName) {
+  return program.body.some((statement) => {
+    if (!MODULE_DECLARATIONS.has(statement.type) || statement.source == null) return false;
+    const source = statement.source.value;
+    return source === packageName || (typeof source === 'string' && source.startsWith(`${packageName}/`));
+  });
+}
+
 function literalText(node) {
   if (node.type === 'Literal') return typeof node.value === 'string' ? node.value : '';
   return node.quasis.length === 1 ? node.quasis[0].value.cooked ?? '' : '';
@@ -58,7 +68,7 @@ const noReimplementedPackageRule = {
     return {
       Program(node) {
         for (const entry of REIMPLEMENTED_PACKAGE_REGISTRY)
-          if (entry.paths.some((pattern) => pattern.test(path))) report(node, entry);
+          if (entry.paths.some((pattern) => pattern.test(path)) && !usesPackage(node, entry.package)) report(node, entry);
       },
       Literal: checkLiteral,
       TemplateLiteral: checkLiteral,

@@ -25,6 +25,10 @@ ruleTester.run('no-reimplemented-package', rule, {
     { code: PLAIN, filename: '/repo/kefi-web/node_modules/x/src/utils/logger.ts' },
     { code: PLAIN, filename: ANALYTICS_FILE, options: [{ allow: ['/src/lib/analytics/'] }] },
     { code: "export const name = 'X-BFF-Csrf-Extra';", filename: '/repo/kefi-web/src/api/kefiHttp.ts' },
+    { code: "export { logger, LoggingService } from '@dloizides/logging-web';", filename: '/repo/katalogos-web/src/utils/logger.ts' },
+    { code: "export * from '@dloizides/logging-web';", filename: '/repo/erevna-web/src/utils/logger.ts' },
+    { code: "import { logger } from '@dloizides/logging-web'; export default logger;", filename: '/repo/kefi-web/src/lib/utils/logger.ts' },
+    { code: "export { track } from '@dloizides/analytics-web/react';", filename: ANALYTICS_FILE },
   ],
 
   invalid: [
@@ -36,6 +40,7 @@ ruleTester.run('no-reimplemented-package', rule, {
     { code: PLAIN, filename: '/repo/apps/aml-v2/src/auth/bffCsrf.ts', errors: [{ messageId: 'reimplemented' }] },
     { code: PLAIN, filename: '/repo/erevna-web/src/auth/forgotPasswordRequest.ts', errors: [{ messageId: 'reimplemented' }] },
     { code: PLAIN, filename: '/repo/selida-web/src/utils/logger.ts', errors: [{ messageId: 'reimplemented' }] },
+    { code: "export * from '@dloizides/logging-web-extra';", filename: '/repo/selida-web/src/utils/logger.ts', errors: [{ messageId: 'reimplemented' }] },
     { code: CSRF_HEADER, filename: '/repo/kefi-web/src/lib/analytics/send.ts', errors: [{ messageId: 'reimplemented' }, { messageId: 'reimplemented' }] },
   ],
 });
