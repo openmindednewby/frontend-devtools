@@ -65,3 +65,13 @@ export const recommendedConfig: FlatConfig = {
   plugins: commentsConfig.plugins,
   rules: { ...commentsConfig.rules, ...rowActionsConfig.rules, ...apiConfig.rules },
 };
+
+export const FOCUS_RULE_NAMES: readonly string[] = ['explicit-initial-focus'];
+
+/** FOCUS-1: a game menu or dialog names the control focused on open. Opt-in, not part of recommendedConfig. */
+export const focusConfig: FlatConfig = {
+  plugins: commentsConfig.plugins,
+  rules: {
+    '@dloizides/explicit-initial-focus': 'error',
+  },
+};

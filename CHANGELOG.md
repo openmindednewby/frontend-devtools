@@ -5,6 +5,14 @@ All notable changes to `@dloizides/frontend-devtools` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-10-23
+
+FOCUS-1 "Every screen names its initial focus", D-FOCUS-2 "Lint rule and ledger".
+
+### Added
+- `explicit-initial-focus`: flags a file that builds a menu of 2+ buttons (HTML strings or `createElement('button')`) with no `MENU_DEFAULT_ATTR` / `data-menu-default` / `dataset.menuDefault` / `initialFocus`, and a JSX `*Dialog` / `*Modal` / `role="dialog"` in a file with no `autoFocus`, `initialFocus(Ref)` or `.focus()` call. Options: `minControls`, `dialogPattern`, `selfFocusing`.
+- `focusConfig` + `FOCUS_RULE_NAMES` (opt-in, not part of `recommendedConfig` or `gameConfig`).
+
 ## [2.1.0] - 2026-10-20
 
 QUAL-ADOPT-1 "Fail lint/arch tests when an app re-implements an existing package" (TS half).

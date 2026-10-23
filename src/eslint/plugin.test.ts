@@ -15,6 +15,7 @@ const EXPECTED_RULE_NAMES = [
   'enforce-route-preload',
   'enforce-test-colocation',
   'enum-file-isolation',
+  'explicit-initial-focus',
   'game-menu-focusable',
   'i18n-interpolation',
   'i18n-param-names',
@@ -36,7 +37,7 @@ const EXPECTED_RULE_NAMES = [
 ].sort();
 
 describe('frontend-devtools eslint plugin', () => {
-  it('exposes all 26 shared rules', () => {
+  it('exposes all 27 shared rules', () => {
     expect(ruleNames).toEqual(EXPECTED_RULE_NAMES);
   });
 
