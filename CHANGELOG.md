@@ -5,6 +5,13 @@ All notable changes to `@dloizides/frontend-devtools` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2026-10-28
+
+OBS-1 "Every app ships metrics, production-grade logs and alerts with working links", D-OBS-15 "Front-end budgets, warn only".
+
+### Added
+- `./lighthouse` subpath: `budgetAssertions` (LCP < 2500 ms, TBT < 200 ms, CLS < 0.1, script transfer < 300 KB, all `warn`), `mobileSettings` (Lighthouse's mid-range phone profile) and `withBudgets(config)`, which merges both into an app's `lighthouserc.js`; keys the app sets win.
+
 ## [2.2.0] - 2026-10-23
 
 FOCUS-1 "Every screen names its initial focus", D-FOCUS-2 "Lint rule and ledger".

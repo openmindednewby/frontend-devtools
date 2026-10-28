@@ -1,7 +1,7 @@
 {
   "name": "@dloizides/frontend-devtools",
   "version": "2.2.0",
-  "description": "Shared RN-web dev tooling (dev-only) for the dloizides.com SaaS frontends: the custom ESLint plugin pack and rule packs (/eslint) and the test-results reporters (/test-results). initI18n moved to @dloizides/i18n in 2.0.0. Never imports a product.",
+  "description": "Shared RN-web dev tooling (dev-only) for the dloizides.com SaaS frontends: the custom ESLint plugin pack and rule packs (/eslint) the test-results reporters (/test-results) and the Lighthouse CI budget preset (/lighthouse). initI18n moved to @dloizides/i18n in 2.0.0. Never imports a product.",
   "keywords": [
     "eslint",
     "eslint-plugin",
@@ -33,6 +33,16 @@
       "import": {
         "types": "./dist/eslint/index.d.mts",
         "default": "./dist/eslint/index.mjs"
+      }
+    },
+    "./lighthouse": {
+      "require": {
+        "types": "./dist/lighthouse/index.d.ts",
+        "default": "./dist/lighthouse/index.js"
+      },
+      "import": {
+        "types": "./dist/lighthouse/index.d.mts",
+        "default": "./dist/lighthouse/index.mjs"
       }
     },
     "./test-results": {

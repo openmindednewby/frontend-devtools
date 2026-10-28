@@ -6,6 +6,7 @@ export default defineConfig({
     'src/test-results/index.ts',
     'src/test-results/jestReporter.ts',
     'src/test-results/vitestReporter.ts',
+    'src/lighthouse/index.ts',
   ],
   format: ['cjs', 'esm'],
   dts: true,

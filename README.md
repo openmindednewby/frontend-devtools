@@ -155,3 +155,12 @@ import { initI18n } from '@dloizides/i18n';
 ## License
 
 MIT © dloizides
+
+## Lighthouse budgets (`/lighthouse`)
+
+D-OBS-15 front-end budgets, warn only, on a mid-range phone. In an app's `lighthouserc.js`:
+
+```js
+const { withBudgets } = require('@dloizides/frontend-devtools/lighthouse');
+module.exports = withBudgets({ ci: { collect: { url: ['http://localhost:8099/'] }, assert: { assertions: {} } } });
+```
