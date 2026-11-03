@@ -75,3 +75,13 @@ export const focusConfig: FlatConfig = {
     '@dloizides/explicit-initial-focus': 'error',
   },
 };
+
+export const COMPOSE_RULE_NAMES: readonly string[] = ['max-component-props'];
+
+/** UI-COMPOSE-1: a component stays small and composes with slots. Opt-in; pass `frozen` for existing over-limit ones. */
+export const composeConfig: FlatConfig = {
+  plugins: commentsConfig.plugins,
+  rules: {
+    '@dloizides/max-component-props': 'error',
+  },
+};

@@ -19,6 +19,7 @@ const EXPECTED_RULE_NAMES = [
   'game-menu-focusable',
   'i18n-interpolation',
   'i18n-param-names',
+  'max-component-props',
   'no-barrel-companion-file',
   'no-duplicate-nav-prefix',
   'no-duplicate-shared-patterns',
@@ -37,7 +38,7 @@ const EXPECTED_RULE_NAMES = [
 ].sort();
 
 describe('frontend-devtools eslint plugin', () => {
-  it('exposes all 27 shared rules', () => {
+  it('exposes all 28 shared rules', () => {
     expect(ruleNames).toEqual(EXPECTED_RULE_NAMES);
   });
 

@@ -15,6 +15,7 @@ import gameMenuFocusable from '../rules/game-menu-focusable.js';
 import i18nInterpolation from '../rules/i18n-interpolation.js';
 import i18nParamNames from '../rules/i18n-param-names.js';
 import noComments from '../rules/no-comments.js';
+import maxComponentProps from '../rules/max-component-props.js';
 import noBarrelCompanionFile from '../rules/no-barrel-companion-file.js';
 import noDuplicateNavPrefix from '../rules/no-duplicate-nav-prefix.js';
 import noDuplicateSharedPatterns from '../rules/no-duplicate-shared-patterns.js';
@@ -46,6 +47,7 @@ const ruleModules: readonly SingleRulePlugin[] = [
   gameMenuFocusable,
   i18nInterpolation,
   i18nParamNames,
+  maxComponentProps,
   noBarrelCompanionFile,
   noComments,
   noDuplicateNavPrefix,
