@@ -14,6 +14,8 @@ const APP_FILE = '/repo/kefi-web/src/api/registrationApi.ts';
 const COMPONENT_FILE = '/repo/apps/aml-v2/src/screens/jobs/RunImport.tsx';
 const RAW_FETCH = "export const load = () => fetch('/bff/api/events');";
 const AXIOS_IMPORT = "import axios from 'axios';";
+const AML_FETCH = "export const load = () => fetch('https://aml.example.invalid/x');";
+const BACKEND_HOSTS = [{ backendHosts: ['aml.example.invalid', '*.backend.example.invalid'] }];
 
 ruleTester.run('no-raw-backend-fetch', rule, {
   valid: [
@@ -43,6 +45,9 @@ ruleTester.run('no-raw-backend-fetch', rule, {
     { code: 'const blob = await fetch(window.URL.createObjectURL(file));', filename: COMPONENT_FILE },
     { code: 'const reader = new FileReader(); reader.onload = () => fetch(reader.result as string);', filename: COMPONENT_FILE },
     { code: 'const reader = new FileReader(); const uri = reader.result as string; void fetch(uri);', filename: COMPONENT_FILE },
+    { code: AML_FETCH, filename: COMPONENT_FILE },
+    { code: "export const load = () => fetch('https://dummyjson.com/products');", filename: COMPONENT_FILE, options: BACKEND_HOSTS },
+    { code: "export const load = () => fetch('https://backend.example.invalid.evil.test/x');", filename: COMPONENT_FILE, options: BACKEND_HOSTS },
   ],
 
   invalid: [
@@ -64,5 +69,8 @@ ruleTester.run('no-raw-backend-fetch', rule, {
     { code: 'const url = makeUrl(file); void fetch(url);', filename: APP_FILE, errors: [{ messageId: 'rawFetch' }] },
     { code: 'const reader = makeReader(); void fetch(reader.result);', filename: APP_FILE, errors: [{ messageId: 'rawFetch' }] },
     { code: 'void fetch(URL.revokeObjectURL(file));', filename: APP_FILE, errors: [{ messageId: 'rawFetch' }] },
+    { code: AML_FETCH, filename: COMPONENT_FILE, options: BACKEND_HOSTS, errors: [{ messageId: 'rawFetch' }] },
+    { code: "export const load = () => fetch('HTTPS://AML.example.invalid');", filename: COMPONENT_FILE, options: BACKEND_HOSTS, errors: [{ messageId: 'rawFetch' }] },
+    { code: 'export const load = (id: string) => fetch(`https://api.backend.example.invalid/jobs/${id}`);', filename: COMPONENT_FILE, options: BACKEND_HOSTS, errors: [{ messageId: 'rawFetch' }] },
   ],
 });

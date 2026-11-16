@@ -5,6 +5,13 @@ All notable changes to `@dloizides/frontend-devtools` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2026-11-16
+
+MODC-1 "Module C unified console", D-MC-46 "AC-MC-14: the lint rule flags our backend hosts".
+
+### Added
+- `no-raw-backend-fetch` option `backendHosts` (exact hostnames or `*.suffix`): an absolute literal URL to one of our backend hosts is reported instead of being treated as third-party. Default `[]` keeps 2.4.0 behaviour.
+
 ## [2.4.0] - 2026-11-03
 
 UI-COMPOSE-1 "Extract shared UI from the start; compose small single-purpose parts", D-COMPOSE-2 "Single responsibility, few props, compose with slots".

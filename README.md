@@ -132,6 +132,21 @@ a prop passed in. Fix: build row actions once per entity with `defineRowActions`
 `*RowActions` module; a table may only omit an action with a reason. Enabled at `error`
 by `recommendedConfig` and `rowActionsConfig`.
 
+#### `no-raw-backend-fetch`
+
+PAT-API-1: app code calls the backend through the shared client or generated hooks, never
+raw `fetch()` or `axios`. An absolute literal URL (`https://host/...`) is treated as a
+third-party call and allowed. Options:
+
+- `allow` (string[]): extra path fragments where raw fetch is allowed.
+- `backendHosts` (string[], default `[]`): hostnames of our own backends. A literal URL whose
+  host matches is reported even though it is absolute. Entries are exact (`aml.example.com`)
+  or `*.suffix` (`*.dloizides.com` matches any subdomain, not the bare domain). Case-insensitive.
+
+```js
+'@dloizides/no-raw-backend-fetch': ['error', { backendHosts: ['aml.dloizides.com', '*.proovid.com'] }],
+```
+
 `ruleNames` exports the sorted list for migration assertions (prove no rule was
 dropped).
 

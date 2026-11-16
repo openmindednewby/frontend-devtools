@@ -14,6 +14,8 @@ const TEST_FILE = /(?:\.(?:test|spec)\.[cm]?[jt]sx?$)|(?:\/__tests__\/)/;
 const EXEMPT_URL_SCHEME = /^\s*(?:data|blob):/i;
 const ABSOLUTE_HTTP_URL = /^https?:\/\/[^/\s]+\//i;
 const ABSOLUTE_HTTP_LITERAL = /^https?:\/\/[^/\s]+(?:[/?#]|$)/i;
+const URL_HOST = /^https?:\/\/([^/\s?#:@]+)/i;
+const WILDCARD_PREFIX = '*.';
 const URL_OBJECTS = new Set(['URL', 'webkitURL']);
 const GLOBAL_OBJECTS = new Set(['window', 'globalThis', 'self']);
 const AXIOS_MODULE = 'axios';
@@ -55,6 +57,22 @@ function isThirdPartyLiteralUrl(node) {
   if (node.type !== 'TemplateLiteral') return false;
   const head = node.quasis[0].value.cooked ?? '';
   return node.expressions.length === 0 ? ABSOLUTE_HTTP_LITERAL.test(head) : ABSOLUTE_HTTP_URL.test(head);
+}
+
+function literalUrlHost(node) {
+  const match = URL_HOST.exec(leadingText(node));
+  return match === null ? '' : match[1].toLowerCase();
+}
+
+function hostMatches(host, pattern) {
+  const wanted = pattern.toLowerCase();
+  if (!wanted.startsWith(WILDCARD_PREFIX)) return host === wanted;
+  return host.endsWith(wanted.slice(1));
+}
+
+function isBackendHostUrl(node, backendHosts) {
+  const host = literalUrlHost(node);
+  return host !== '' && backendHosts.some((pattern) => hostMatches(host, pattern));
 }
 
 function unwrapExpression(node) {
@@ -117,9 +135,10 @@ function scopeOf(context, node) {
   return typeof sourceCode.getScope === 'function' ? sourceCode.getScope(node) : context.getScope();
 }
 
-function isExemptFetchTarget(context, node) {
+function isExemptFetchTarget(context, node, backendHosts) {
   const target = node.arguments[0];
-  if (isDataOrBlobUrl(target) || isThirdPartyLiteralUrl(target)) return true;
+  if (isDataOrBlobUrl(target)) return true;
+  if (isThirdPartyLiteralUrl(target)) return !isBackendHostUrl(target, backendHosts);
   return isLocalObjectUrl(target, scopeOf(context, node));
 }
 
@@ -147,6 +166,7 @@ const noRawBackendFetchRule = {
         type: 'object',
         properties: {
           allow: { type: 'array', items: { type: 'string' } },
+          backendHosts: { type: 'array', items: { type: 'string' } },
         },
         additionalProperties: false,
       },
@@ -162,6 +182,7 @@ const noRawBackendFetchRule = {
   create(context) {
     const options = context.options[0] ?? {};
     const allow = Array.isArray(options.allow) ? options.allow : [];
+    const backendHosts = Array.isArray(options.backendHosts) ? options.backendHosts : [];
     const filename = context.filename ?? context.getFilename();
     if (isExemptFile(filename, allow)) return {};
     const sourceCode = context.sourceCode ?? context.getSourceCode();
@@ -170,7 +191,7 @@ const noRawBackendFetchRule = {
     return {
       CallExpression(node) {
         if (isFetchCallee(node.callee)) {
-          if (!isExemptFetchTarget(context, node)) context.report({ node, messageId: 'rawFetch' });
+          if (!isExemptFetchTarget(context, node, backendHosts)) context.report({ node, messageId: 'rawFetch' });
           return;
         }
         const isRequire = node.callee.type === 'Identifier' && node.callee.name === 'require';
