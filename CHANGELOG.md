@@ -5,6 +5,14 @@ All notable changes to `@dloizides/frontend-devtools` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+RULES-ANALYZER-1 "Deterministic rules to analyzers" step 3b, ESLint 8 has no --suppress-all.
+
+### Added
+- `eslint-baseline check|write --input <eslint --format json output> [--baseline eslint-baseline.json] [--root <dir>]` (bin): shrink-only count gate for `max-lines`, `@typescript-eslint/member-ordering`, `member-order-fields/member-ordering` and `member-order-accessors/member-ordering`; baseline `{relpath: {ruleId: count}}`; `check` fails on a rise or a new file and reports stale entries.
+- `max-lines` 300 raw lines (FILE-SIZE-1) and per-kind member ordering by access (MEMBER-ORDER-1) via the plugin aliases `member-order-fields` and `member-order-accessors`.
+
 ## [2.6.0] - 2026-11-19
 
 ESTATE-AUDIT-1 "Estate audit" W2a, findings D1 "one ESLint base config", D7 "metro and babel preset", D8 "jest preset".

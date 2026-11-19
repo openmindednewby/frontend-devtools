@@ -11,6 +11,7 @@ export default defineConfig({
     'src/babel/index.ts',
     'src/jest/index.ts',
     'src/jest/setup.ts',
+    'src/baseline/cli.ts',
   ],
   format: ['cjs', 'esm'],
   dts: true,
