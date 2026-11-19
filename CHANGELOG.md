@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 RULES-ANALYZER-1 "Deterministic rules to analyzers" step 3b, ESLint 8 has no --suppress-all.
 
 ### Added
+- `eslint-baseline lint [--baseline eslint-baseline.json] [-- <eslint args>]`: the app lint script. Runs the app's own ESLint once with the four gated rules appended from this package, fails on any other error (and on warnings over `--max-warnings`) exactly like plain ESLint, and count-gates the four rules against the baseline. The gated rules never sit in the app config, so a package bump cannot break plain lint; an app with no baseline file is held at zero.
 - `eslint-baseline check|write --input <eslint --format json output> [--baseline eslint-baseline.json] [--root <dir>]` (bin): shrink-only count gate for `max-lines`, `@typescript-eslint/member-ordering`, `member-order-fields/member-ordering` and `member-order-accessors/member-ordering`; baseline `{relpath: {ruleId: count}}`; `check` fails on a rise or a new file and reports stale entries.
 - `max-lines` 300 raw lines (FILE-SIZE-1) and per-kind member ordering by access (MEMBER-ORDER-1) via the plugin aliases `member-order-fields` and `member-order-accessors`.
 

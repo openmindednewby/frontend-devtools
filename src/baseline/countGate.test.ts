@@ -120,7 +120,7 @@ describe('parseGateArgs', () => {
 
     const args = parseGateArgs(argv, '/repo');
 
-    expect(args).toEqual({ mode: GateMode.Check, input: 'out.json', baseline: 'eslint-baseline.json', root: '/repo' });
+    expect(args).toEqual({ mode: GateMode.Check, input: 'out.json', baseline: 'eslint-baseline.json', root: '/repo', passthrough: [] });
   });
 
   it('with write and every option, returns them', () => {
@@ -128,7 +128,7 @@ describe('parseGateArgs', () => {
 
     const args = parseGateArgs(argv, '/repo');
 
-    expect(args).toEqual({ mode: GateMode.Write, input: 'o.json', baseline: 'b.json', root: '/box/app' });
+    expect(args).toEqual({ mode: GateMode.Write, input: 'o.json', baseline: 'b.json', root: '/box/app', passthrough: [] });
   });
 
   it('with an unknown mode, throws a usage error', () => {
