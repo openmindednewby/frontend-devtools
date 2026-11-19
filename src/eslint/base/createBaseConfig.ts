@@ -18,6 +18,7 @@ import {
 import { JEST_SETUP_GLOBALS, REACT_NATIVE_GLOBALS, TEST_GLOBALS } from './globals';
 import { I18N_LITERAL_STRING_RULES, TEST_FILE_RULES } from './i18nRules';
 import { HOUSE_RULES, IMPORT_RULES } from './importRules';
+import { MEMBER_ORDER_RULES, memberOrderPlugins } from './memberOrderRules';
 import { QUALITY_RULES } from './qualityRules';
 import { REACT_NATIVE_RULES, REACT_RULES, stableHookArgsRule } from './reactRules';
 import { TYPESCRIPT_RULES } from './typescriptRules';
@@ -47,6 +48,7 @@ function typescriptBlock(deps: BaseConfigDeps, options: BaseConfigOptions): Flat
       'import': plugins.import,
       'unused-imports': plugins.unusedImports,
       'react-compiler': plugins.reactCompiler,
+      ...memberOrderPlugins(plugins.typescript),
       ...HOUSE_PLUGINS,
     },
     settings: {
@@ -55,6 +57,7 @@ function typescriptBlock(deps: BaseConfigDeps, options: BaseConfigOptions): Flat
     },
     rules: {
       ...TYPESCRIPT_RULES,
+      ...MEMBER_ORDER_RULES,
       ...REACT_RULES,
       ...stableHookArgsRule(options.stableHookIgnorePatterns ?? DEFAULT_STABLE_HOOK_IGNORE_PATTERNS),
       ...REACT_NATIVE_RULES,

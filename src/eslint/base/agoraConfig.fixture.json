@@ -450,9 +450,9 @@
    "max-lines": [
     "error",
     {
-     "max": 200,
-     "skipBlankLines": true,
-     "skipComments": true
+     "max": 300,
+     "skipBlankLines": false,
+     "skipComments": false
     }
    ],
    "smart-max-lines/smart-max-lines": [
@@ -640,6 +640,74 @@
     {
      "selector": "WhileStatement > LogicalExpression[right.type=\"LogicalExpression\"]",
      "message": "While condition has more than 2 expressions. Extract to a named variable"
+    }
+   ],
+   "@typescript-eslint/member-ordering": [
+    "error",
+    {
+     "default": {
+      "memberTypes": [
+       [
+        "public-method"
+       ],
+       [
+        "protected-method"
+       ],
+       [
+        "private-method",
+        "#private-method"
+       ]
+      ],
+      "order": "as-written"
+     }
+    }
+   ],
+   "member-order-fields/member-ordering": [
+    "error",
+    {
+     "default": {
+      "memberTypes": [
+       [
+        "public-field",
+        "public-accessor"
+       ],
+       [
+        "protected-field",
+        "protected-accessor"
+       ],
+       [
+        "private-field",
+        "private-accessor",
+        "#private-field",
+        "#private-accessor"
+       ]
+      ],
+      "order": "as-written"
+     }
+    }
+   ],
+   "member-order-accessors/member-ordering": [
+    "error",
+    {
+     "default": {
+      "memberTypes": [
+       [
+        "public-get",
+        "public-set"
+       ],
+       [
+        "protected-get",
+        "protected-set"
+       ],
+       [
+        "private-get",
+        "private-set",
+        "#private-get",
+        "#private-set"
+       ]
+      ],
+      "order": "as-written"
+     }
     }
    ]
   },
