@@ -8,6 +8,8 @@
  */
 export { plugin, rules, ruleNames } from './plugin';
 export { legacyPlugins } from './legacy';
+export { createBaseConfig } from './base/createBaseConfig';
+export type { BaseConfigDeps, BaseConfigOptions, BoundaryElement, RoutePreloadOptions } from './base/types';
 export { HOUSE_PATTERN_RULE_NAMES, patternPacksConfig } from './patternPacks';
 export {
   API_RULE_NAMES,

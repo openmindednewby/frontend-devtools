@@ -5,6 +5,16 @@ All notable changes to `@dloizides/frontend-devtools` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.0] - 2026-11-19
+
+ESTATE-AUDIT-1 "Estate audit" W2a, findings D1 "one ESLint base config", D7 "metro and babel preset", D8 "jest preset".
+
+### Added
+- `createBaseConfig(deps, options)` in `/eslint`: the full house flat config (TypeScript strict, React, React Native, a11y, import order, house rules, i18n, test overrides, comments, api, pattern packs, boundaries, prettier). The app passes the third-party plugins it installs; `options` covers extra ignores, tsconfig path, stable-hook ignore patterns, logger files, route-preload and nav-prefix blocks, boundary elements. A test holds it equal, block by block and rule by rule, to the agora-web config it replaces.
+- `/metro`: `withSharedMetroConfig(getDefaultConfig(root), { projectRoot })` (symlinks, package exports, build-dir block list, `@/` alias, one host React).
+- `/babel`: `createBabelConfig(api, options)` (babel-preset-expo, `@` alias, import.meta transform, const enums as runtime objects).
+- `/jest`: `createJestConfig(options)` (jest-expo preset, RN/Expo transform list, `@/` mapper, coverage defaults) and `/jest/setup`, the shared Expo mocks as a `setupFilesAfterEnv` entry.
+
 ## [2.5.0] - 2026-11-16
 
 MODC-1 "Module C unified console", D-MC-46 "AC-MC-14: the lint rule flags our backend hosts".

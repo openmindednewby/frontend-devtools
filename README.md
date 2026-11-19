@@ -150,6 +150,22 @@ third-party call and allowed. Options:
 `ruleNames` exports the sorted list for migration assertions (prove no rule was
 dropped).
 
+## App presets (`createBaseConfig`, `/metro`, `/babel`, `/jest`)
+
+```js
+// eslint.config.mjs: import the plugins the app installs, then
+export default createBaseConfig({ jsRecommended: js.configs.recommended, prettierConfig, tsParser, jsoncParser,
+  plugins: { typescript, react, reactHooks, reactNative, reactNativeA11y, import: importPlugin, unusedImports, reactCompiler, i18next } });
+// metro.config.js
+module.exports = withSharedMetroConfig(getDefaultConfig(__dirname), { projectRoot: __dirname });
+// babel.config.js
+module.exports = (api) => createBabelConfig(api);
+// jest.config.js
+module.exports = createJestConfig({ setupFilesAfterEnv: ['@dloizides/frontend-devtools/jest/setup', '<rootDir>/jest.setup.js'] });
+```
+
+App-specific settings go in each preset's options; nothing product-specific lives in the package.
+
 ## i18n init factory — moved
 
 `initI18n` and `InitI18nOptions` live in `@dloizides/i18n` (>= 1.1.0) since 2.0.0:

@@ -1,7 +1,7 @@
 {
   "name": "@dloizides/frontend-devtools",
   "version": "2.5.0",
-  "description": "Shared RN-web dev tooling (dev-only) for the dloizides.com SaaS frontends: the custom ESLint plugin pack and rule packs (/eslint) the test-results reporters (/test-results) and the Lighthouse CI budget preset (/lighthouse). initI18n moved to @dloizides/i18n in 2.0.0. Never imports a product.",
+  "description": "Shared RN-web dev tooling (dev-only) for the dloizides.com SaaS frontends: the custom ESLint plugin pack and rule packs (/eslint) the test-results reporters (/test-results), the Lighthouse CI budget preset (/lighthouse), the house eslint base preset (createBaseConfig in /eslint) and the metro, babel and jest presets (/metro, /babel, /jest, /jest/setup). initI18n moved to @dloizides/i18n in 2.0.0. Never imports a product.",
   "keywords": [
     "eslint",
     "eslint-plugin",
@@ -73,6 +73,46 @@
       "import": {
         "types": "./dist/test-results/vitestReporter.d.mts",
         "default": "./dist/test-results/vitestReporter.mjs"
+      }
+    },
+    "./metro": {
+      "require": {
+        "types": "./dist/metro/index.d.ts",
+        "default": "./dist/metro/index.js"
+      },
+      "import": {
+        "types": "./dist/metro/index.d.mts",
+        "default": "./dist/metro/index.mjs"
+      }
+    },
+    "./babel": {
+      "require": {
+        "types": "./dist/babel/index.d.ts",
+        "default": "./dist/babel/index.js"
+      },
+      "import": {
+        "types": "./dist/babel/index.d.mts",
+        "default": "./dist/babel/index.mjs"
+      }
+    },
+    "./jest": {
+      "require": {
+        "types": "./dist/jest/index.d.ts",
+        "default": "./dist/jest/index.js"
+      },
+      "import": {
+        "types": "./dist/jest/index.d.mts",
+        "default": "./dist/jest/index.mjs"
+      }
+    },
+    "./jest/setup": {
+      "require": {
+        "types": "./dist/jest/setup.d.ts",
+        "default": "./dist/jest/setup.js"
+      },
+      "import": {
+        "types": "./dist/jest/setup.d.mts",
+        "default": "./dist/jest/setup.mjs"
       }
     }
   },

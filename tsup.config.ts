@@ -7,6 +7,10 @@ export default defineConfig({
     'src/test-results/jestReporter.ts',
     'src/test-results/vitestReporter.ts',
     'src/lighthouse/index.ts',
+    'src/metro/index.ts',
+    'src/babel/index.ts',
+    'src/jest/index.ts',
+    'src/jest/setup.ts',
   ],
   format: ['cjs', 'esm'],
   dts: true,
@@ -17,4 +21,5 @@ export default defineConfig({
   minify: false,
   target: 'es2020',
   outDir: 'dist',
+  external: ['react', 'react-native'],
 });

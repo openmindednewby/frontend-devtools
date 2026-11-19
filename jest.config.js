@@ -1,5 +1,5 @@
 /** @type {import('jest').Config} */
-const NODE_ONLY_TESTS = ['<rootDir>/src/eslint/patternPacks.test.ts'];
+const NODE_ONLY_TESTS = ['<rootDir>/src/eslint/patternPacks.test.ts', '<rootDir>/src/eslint/base/createBaseConfig.test.ts'];
 
 const project = {
   preset: 'ts-jest',
