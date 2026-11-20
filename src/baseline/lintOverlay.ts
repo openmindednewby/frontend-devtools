@@ -3,6 +3,7 @@ import type { Linter } from 'eslint';
 export const OVERLAY_FILE = '.eslint-baseline-overlay.mjs';
 
 const TS_PLUGIN = '@typescript-eslint';
+const MISSING_PLUGIN = `eslint-baseline lint: no ${TS_PLUGIN} plugin in the app config or node_modules, so the member-ordering rules cannot run; install ${TS_PLUGIN}/eslint-plugin`;
 const PLUGIN_NAMES = [TS_PLUGIN, 'member-order-fields', 'member-order-accessors'];
 
 function pick(rules: Linter.RulesRecord, plugin: boolean): string {
@@ -18,8 +19,9 @@ export function buildOverlay(appConfigFile: string, rules: Linter.RulesRecord): 
     'const list = (Array.isArray(app) ? app : [app]).flat(Infinity);',
     `let ts = list.map((entry) => entry && entry.plugins && entry.plugins[${JSON.stringify(TS_PLUGIN)}]).find(Boolean);`,
     `if (!ts) { try { ts = (await import(${JSON.stringify(`${TS_PLUGIN}/eslint-plugin`)})).default; } catch { ts = undefined; } }`,
-    `const plugins = ts ? Object.fromEntries(${JSON.stringify(PLUGIN_NAMES)}.map((name) => [name, ts])) : {};`,
-    `const rules = { ...${pick(rules, false)}, ...(ts ? ${pick(rules, true)} : {}) };`,
+    `if (!ts) { throw new Error(${JSON.stringify(MISSING_PLUGIN)}); }`,
+    `const plugins = Object.fromEntries(${JSON.stringify(PLUGIN_NAMES)}.map((name) => [name, ts]));`,
+    `const rules = { ...${pick(rules, false)}, ...${pick(rules, true)} };`,
     'export default [...list, { plugins, rules }];',
     '',
   ].join('\n');
