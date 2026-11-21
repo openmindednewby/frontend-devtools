@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { createRequire } from 'module';
 import * as path from 'path';
 
 export interface MetroResolution {
@@ -22,6 +23,7 @@ export interface SharedMetroOptions {
   srcDir?: string;
 }
 
+const SINGLETON_PACKAGES = ['@tanstack/react-query'];
 const DEFAULT_BLOCKED_DIRS = ['dist', 'coverage', 'lighthouse-reports'];
 const ALIAS_PREFIX = '@/';
 const ALIAS_EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx', '.json', '/index.ts', '/index.tsx', '/index.js'];
@@ -48,13 +50,25 @@ function resolveHostCopy(projectRoot: string, packageName: string, moduleName: s
   return { filePath: path.join(hostPath, file), type: 'sourceFile' };
 }
 
-/** Resolver that maps `@/` to src and forces react / react-dom to the host app's single copy. */
+function resolveSingleton(projectRoot: string, moduleName: string): MetroResolution | undefined {
+  if (!SINGLETON_PACKAGES.includes(moduleName)) {
+    return undefined;
+  }
+  try {
+    return { filePath: createRequire(path.join(projectRoot, 'package.json')).resolve(moduleName), type: 'sourceFile' };
+  } catch {
+    return undefined;
+  }
+}
+
+/** Resolver that maps `@/` to src and forces react, react-dom and react-query to the host app's single copy. */
 export function createResolveRequest(projectRoot: string, srcDir = 'src'): MetroResolveRequest {
   return (context: MetroResolveContext, moduleName: string, platform: string | null): MetroResolution => {
     const aliased = moduleName.startsWith(ALIAS_PREFIX) ? resolveAlias(projectRoot, srcDir, moduleName) : undefined;
     return aliased
       ?? resolveHostCopy(projectRoot, 'react', moduleName)
       ?? resolveHostCopy(projectRoot, 'react-dom', moduleName)
+      ?? resolveSingleton(projectRoot, moduleName)
       ?? context.resolveRequest(context, moduleName, platform);
   };
 }
