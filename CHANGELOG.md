@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- metro: `createResolveRequest` pins `react-i18next`, `i18next`, `axios` (browser build `axios/dist/browser/axios.cjs`), `react-redux` and `react-hook-form` to the host copy, next to `@tanstack/react-query` (DEVTOOLS-SINGLETONS-1 "Metro forces one copy of every context or singleton package"). A `@dloizides/*` package whose `browser` export is CommonJS (`@dloizides/i18n`, `@dloizides/bff-web-client`) no longer gets a second copy of the context or default instance. The list lives in `src/metro/singletonPackages.ts`; a package the host does not install falls back to Metro.
+
 RULES-ANALYZER-1 "Deterministic rules to analyzers" step 3b, ESLint 8 has no --suppress-all.
 
 ### Added

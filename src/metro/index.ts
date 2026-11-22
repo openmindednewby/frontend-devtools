@@ -2,6 +2,8 @@ import * as fs from 'fs';
 import { createRequire } from 'module';
 import * as path from 'path';
 
+import { SINGLETON_PACKAGES } from './singletonPackages';
+
 export interface MetroResolution {
   filePath?: string;
   type: string;
@@ -23,7 +25,6 @@ export interface SharedMetroOptions {
   srcDir?: string;
 }
 
-const SINGLETON_PACKAGES = ['@tanstack/react-query'];
 const DEFAULT_BLOCKED_DIRS = ['dist', 'coverage', 'lighthouse-reports'];
 const ALIAS_PREFIX = '@/';
 const ALIAS_EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx', '.json', '/index.ts', '/index.tsx', '/index.js'];
@@ -51,17 +52,18 @@ function resolveHostCopy(projectRoot: string, packageName: string, moduleName: s
 }
 
 function resolveSingleton(projectRoot: string, moduleName: string): MetroResolution | undefined {
-  if (!SINGLETON_PACKAGES.includes(moduleName)) {
+  const hostSpecifier = SINGLETON_PACKAGES.get(moduleName);
+  if (hostSpecifier === undefined) {
     return undefined;
   }
   try {
-    return { filePath: createRequire(path.join(projectRoot, 'package.json')).resolve(moduleName), type: 'sourceFile' };
+    return { filePath: createRequire(path.join(projectRoot, 'package.json')).resolve(hostSpecifier), type: 'sourceFile' };
   } catch {
     return undefined;
   }
 }
 
-/** Resolver that maps `@/` to src and forces react, react-dom and react-query to the host app's single copy. */
+/** Resolver that maps `@/` to src and forces react, react-dom and every SINGLETON_PACKAGES entry to the host app's single copy. */
 export function createResolveRequest(projectRoot: string, srcDir = 'src'): MetroResolveRequest {
   return (context: MetroResolveContext, moduleName: string, platform: string | null): MetroResolution => {
     const aliased = moduleName.startsWith(ALIAS_PREFIX) ? resolveAlias(projectRoot, srcDir, moduleName) : undefined;
